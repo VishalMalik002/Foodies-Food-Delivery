@@ -109,3 +109,59 @@ src
 │       └── application.properties
 │
 └── test
+
+## ⚙️ Installation & Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/VishalMalik002/Foodies-Food-Delivery.git
+
+## 📡 Main API Modules
+
+The application provides REST APIs for:
+
+- Authentication
+- Users
+- Restaurants
+- Menu Items
+- Cart
+- Orders
+- Payments
+- Coupons
+- Reviews
+- Delivery Partners
+
+## 🔄 Order Flow
+
+```text
+PLACED
+   ↓
+CONFIRMED
+   ↓
+PREPARING
+   ↓
+OUT_FOR_DELIVERY
+   ↓
+DELIVERED
+
+## 🚀 Future Enhancements
+
+- Online payment gateway integration
+- Real-time delivery tracking
+- Email and SMS notifications
+- Advanced restaurant search and filtering
+- Redis caching
+- Docker deployment
+- Cloud deployment
+- Automated testing
+- Swagger/OpenAPI documentation
+
+## 👨‍💻 Developer
+
+**Vishal Malik**
+
+B.Tech – Computer Science & Engineering (Data Science)
+
+GitHub:  
+https://github.com/VishalMalik002
