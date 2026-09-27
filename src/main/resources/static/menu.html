@@ -1,0 +1,1982 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Restaurant Menu | Foodies</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f7f7f7;
+            font-family: Arial, sans-serif;
+        }
+
+        .menu-page {
+            min-height: 100vh;
+        }
+
+        /* ================= HEADER ================= */
+
+        .menu-header {
+            background: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .menu-logo {
+            color: #ff6b00;
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .back-btn {
+            border: none;
+            background: #fff1e8;
+            color: #ff6b00;
+            padding: 10px 18px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            background: #ffe1cc;
+        }
+
+        /* ================= MAIN ================= */
+
+        .menu-container {
+            width: 88%;
+            max-width: 1250px;
+            margin: auto;
+            padding: 40px 0;
+        }
+
+        /* ================= RESTAURANT INFO ================= */
+
+        .restaurant-heading {
+            background: white;
+            padding: 28px;
+            border-radius: 18px;
+            margin-bottom: 28px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+        }
+
+        .restaurant-heading h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .restaurant-info {
+            margin: 0;
+            color: #777;
+            line-height: 1.6;
+        }
+
+        .rating-display {
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .rating-stars {
+            color: #ffb400;
+            font-size: 22px;
+            letter-spacing: 2px;
+        }
+
+        .rating-number {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .rating-count {
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* ================= MENU ================= */
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.06);
+            transition: 0.3s;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .food-image {
+            height: 170px;
+            background: linear-gradient(
+                135deg,
+                #ff6b00,
+                #ff9a5c
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 58px;
+        }
+
+        .food-content {
+            padding: 22px;
+        }
+
+        .food-content h3 {
+            margin: 0 0 8px;
+            font-size: 20px;
+        }
+
+        .food-description {
+            color: #777;
+            line-height: 1.5;
+            min-height: 45px;
+        }
+
+        .food-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .food-price {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .add-cart-btn {
+            border: none;
+            background: #ff6b00;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .add-cart-btn:hover {
+            background: #e85f00;
+        }
+
+        /* ================= COMMON ================= */
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #777;
+        }
+
+        .info-message {
+            background: #fff8f2;
+            color: #666;
+            padding: 16px;
+            border-radius: 10px;
+            line-height: 1.6;
+        }
+
+        /* ================= REVIEWS ================= */
+
+        .reviews-section {
+            margin-top: 45px;
+        }
+
+        .section-title {
+            margin-bottom: 18px;
+        }
+
+        .section-title h2 {
+            margin: 0 0 5px;
+            font-size: 26px;
+        }
+
+        .section-title p {
+            margin: 0;
+            color: #777;
+        }
+
+        /* ================= REVIEW FORM ================= */
+
+        .review-form {
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+
+        .review-form h3 {
+            margin-top: 0;
+            margin-bottom: 18px;
+        }
+
+        .order-select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 9px;
+            margin-bottom: 18px;
+            font-size: 15px;
+            background: white;
+            outline: none;
+        }
+
+        .order-select:focus {
+            border-color: #ff6b00;
+        }
+
+        .star-selector {
+            display: flex;
+            gap: 4px;
+            margin-top: 10px;
+            margin-bottom: 18px;
+        }
+
+        .star-btn {
+            border: none;
+            background: transparent;
+            color: #ccc;
+            font-size: 32px;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .star-btn.active {
+            color: #ffb400;
+        }
+
+        .review-comment {
+            width: 100%;
+            min-height: 110px;
+            resize: vertical;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 9px;
+            font-family: inherit;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .review-comment:focus {
+            border-color: #ff6b00;
+        }
+
+        .submit-review-btn {
+            margin-top: 15px;
+            border: none;
+            background: #ff6b00;
+            color: white;
+            padding: 12px 22px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+
+        .submit-review-btn:hover {
+            background: #e85f00;
+        }
+
+        .submit-review-btn:disabled {
+            background: #aaa;
+            cursor: not-allowed;
+        }
+
+        .review-message {
+            margin-top: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .success-message {
+            color: #188038;
+        }
+
+        .error-message {
+            color: #d93025;
+        }
+
+        /* ================= REVIEW LIST ================= */
+
+        .reviews-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .review-card {
+            background: white;
+            padding: 22px;
+            border-radius: 16px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+        }
+
+        .review-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+        .review-user {
+            font-weight: 700;
+        }
+
+        .review-stars {
+            color: #ffb400;
+            letter-spacing: 2px;
+            white-space: nowrap;
+        }
+
+        .review-comment-text {
+            color: #666;
+            line-height: 1.6;
+            margin: 0;
+        }
+
+        /* ================= MOBILE ================= */
+
+        @media (max-width: 900px) {
+
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .reviews-list {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .menu-header {
+                padding: 16px 4%;
+            }
+
+            .menu-logo {
+                font-size: 22px;
+            }
+
+            .header-buttons {
+                gap: 5px;
+            }
+
+            .back-btn {
+                padding: 9px 11px;
+                font-size: 12px;
+            }
+
+            .menu-container {
+                width: 92%;
+                padding: 30px 0;
+            }
+
+            .restaurant-heading h1 {
+                font-size: 25px;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .food-bottom {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .add-cart-btn {
+                width: 100%;
+            }
+
+            .review-top {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+    <script src="js/notifications.js"></script>
+
+</head>
+
+
+<body>
+
+<div class="menu-page">
+
+    <!-- ================= HEADER ================= -->
+
+    <header class="menu-header">
+
+        <div class="menu-logo">
+            🍔 Foodies
+        </div>
+
+        <div class="header-buttons">
+
+            <button
+                class="back-btn"
+                onclick="openCart()">
+
+                🛒 Cart
+                <span id="cartCount">(0)</span>
+
+            </button>
+
+            <button
+                class="back-btn"
+                onclick="goBack()">
+
+                ← Restaurants
+
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- ================= MAIN ================= -->
+
+    <main class="menu-container">
+
+        <!-- RESTAURANT -->
+
+        <div class="restaurant-heading">
+
+            <h1 id="restaurantName">
+                Restaurant Menu
+            </h1>
+
+            <p
+                id="restaurantInfo"
+                class="restaurant-info">
+
+                Loading restaurant information...
+
+            </p>
+
+            <div class="rating-display">
+
+                <span
+                    id="ratingStars"
+                    class="rating-stars">
+
+                    ☆☆☆☆☆
+
+                </span>
+
+                <span
+                    id="ratingNumber"
+                    class="rating-number">
+
+                    0.0
+
+                </span>
+
+                <span
+                    id="ratingCount"
+                    class="rating-count">
+
+                    No reviews yet
+
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- MENU -->
+
+        <div
+            id="menuGrid"
+            class="menu-grid">
+
+            <div class="loading">
+                Loading menu...
+            </div>
+
+        </div>
+
+
+        <!-- ================= REVIEWS ================= -->
+
+        <section class="reviews-section">
+
+            <div class="section-title">
+
+                <h2>
+                    ⭐ Customer Reviews
+                </h2>
+
+                <p>
+                    See what customers think about this restaurant.
+                </p>
+
+            </div>
+
+
+            <!-- REVIEW FORM -->
+
+            <div class="review-form">
+
+                <h3>
+                    ✍️ Write a Review
+                </h3>
+
+                <div
+                    id="reviewInfo"
+                    class="info-message">
+
+                    Checking your delivered orders...
+
+                </div>
+
+
+                <div
+                    id="reviewFormContent"
+                    style="display:none;">
+
+                    <select
+                        id="orderSelect"
+                        class="order-select">
+
+                        <option value="">
+                            Select your delivered order
+                        </option>
+
+                    </select>
+
+
+                    <strong>
+                        Your Rating
+                    </strong>
+
+
+                    <div
+                        id="starSelector"
+                        class="star-selector">
+
+                        <button
+                            type="button"
+                            class="star-btn"
+                            onclick="selectRating(1)">
+                            ★
+                        </button>
+
+                        <button
+                            type="button"
+                            class="star-btn"
+                            onclick="selectRating(2)">
+                            ★
+                        </button>
+
+                        <button
+                            type="button"
+                            class="star-btn"
+                            onclick="selectRating(3)">
+                            ★
+                        </button>
+
+                        <button
+                            type="button"
+                            class="star-btn"
+                            onclick="selectRating(4)">
+                            ★
+                        </button>
+
+                        <button
+                            type="button"
+                            class="star-btn"
+                            onclick="selectRating(5)">
+                            ★
+                        </button>
+
+                    </div>
+
+
+                    <textarea
+                        id="reviewComment"
+                        class="review-comment"
+                        placeholder="Write your experience about the food and delivery..."></textarea>
+
+
+                    <button
+                        id="submitReviewButton"
+                        class="submit-review-btn"
+                        onclick="submitReview()">
+
+                        Submit Review
+
+                    </button>
+
+
+                    <div
+                        id="reviewMessage"
+                        class="review-message">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- REVIEW LIST -->
+
+            <div
+                id="reviewsList"
+                class="reviews-list">
+
+                <div class="loading">
+                    Loading reviews...
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    /* =====================================================
+       AUTHENTICATION
+    ===================================================== */
+
+    const token =
+        localStorage.getItem("foodiesToken");
+
+
+    if (!token) {
+
+        window.location.href = "login.html";
+
+    }
+
+
+    /* =====================================================
+       RESTAURANT ID
+    ===================================================== */
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+
+    const restaurantId =
+        params.get("restaurantId");
+
+
+    if (!restaurantId) {
+
+        document.getElementById(
+            "menuGrid"
+        ).innerHTML = `
+            <div class="loading">
+                Restaurant not selected.
+            </div>
+        `;
+
+    } else {
+
+        loadRestaurant();
+        loadRestaurantMenu();
+        loadRestaurantRating();
+        loadReviews();
+        loadReviewOrders();
+
+    }
+
+
+    updateCartCount();
+
+
+    /* =====================================================
+       GET USER FROM JWT
+    ===================================================== */
+
+    function getCurrentUserFromToken() {
+
+        try {
+
+            const payload =
+                JSON.parse(
+                    atob(
+                        token
+                            .split(".")[1]
+                            .replace(/-/g, "+")
+                            .replace(/_/g, "/")
+                    )
+                );
+
+
+            return {
+                email: payload.sub
+            };
+
+
+        } catch (error) {
+
+            console.error(
+                "JWT reading error:",
+                error
+            );
+
+            return null;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       RESTAURANT INFORMATION
+    ===================================================== */
+
+    async function loadRestaurant() {
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/restaurants/${restaurantId}`
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load restaurant"
+                );
+
+            }
+
+
+            const restaurant =
+                await response.json();
+
+
+            document.getElementById(
+                "restaurantName"
+            ).textContent =
+                restaurant.name ||
+                "Restaurant";
+
+
+            document.getElementById(
+                "restaurantInfo"
+            ).textContent =
+                `📍 ${restaurant.address || "Location unavailable"} • 🕐 ${restaurant.openingTime || "N/A"} - ${restaurant.closingTime || "N/A"}`;
+
+
+        } catch (error) {
+
+            console.error(
+                "Restaurant error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       MENU
+    ===================================================== */
+
+    async function loadRestaurantMenu() {
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/menu-items/restaurant/${restaurantId}`,
+                    {
+                        headers: {
+                            "Authorization":
+                                "Bearer " + token
+                        }
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load menu"
+                );
+
+            }
+
+
+            const menuItems =
+                await response.json();
+
+
+            const menuGrid =
+                document.getElementById(
+                    "menuGrid"
+                );
+
+
+            menuGrid.innerHTML = "";
+
+
+            if (!menuItems.length) {
+
+                menuGrid.innerHTML = `
+                    <div class="loading">
+                        No menu items available.
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            menuItems.forEach(function(item) {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                card.className =
+                    "menu-card";
+
+
+                card.innerHTML = `
+
+                    <div class="food-image">
+                        🍔
+                    </div>
+
+                    <div class="food-content">
+
+                        <h3>
+                            ${item.name || "Food Item"}
+                        </h3>
+
+                        <div class="food-description">
+                            ${item.description || "Delicious food item"}
+                        </div>
+
+                        <div class="food-bottom">
+
+                            <span class="food-price">
+                                ₹${item.price || 0}
+                            </span>
+
+                            <button
+                                class="add-cart-btn"
+                                onclick="addToCart(${item.id})">
+
+                                Add to Cart
+
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+
+                menuGrid.appendChild(card);
+
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "Menu loading error:",
+                error
+            );
+
+
+            document.getElementById(
+                "menuGrid"
+            ).innerHTML = `
+                <div class="loading">
+                    Unable to load menu.
+                </div>
+            `;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       RESTAURANT AVERAGE RATING
+    ===================================================== */
+
+    async function loadRestaurantRating() {
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/reviews/restaurant/${restaurantId}/average`
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load rating"
+                );
+
+            }
+
+
+            const average =
+                await response.json();
+
+
+            const rating =
+                Number(average || 0);
+
+
+            document.getElementById(
+                "ratingNumber"
+            ).textContent =
+                rating.toFixed(1);
+
+
+            document.getElementById(
+                "ratingStars"
+            ).textContent =
+                createStars(rating);
+
+
+        } catch (error) {
+
+            console.error(
+                "Rating error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       CREATE STARS
+    ===================================================== */
+
+    function createStars(rating) {
+
+        let stars = "";
+
+        const rounded =
+            Math.round(
+                Number(rating) || 0
+            );
+
+
+        for (
+            let i = 1;
+            i <= 5;
+            i++
+        ) {
+
+            stars +=
+                i <= rounded
+                    ? "★"
+                    : "☆";
+
+        }
+
+
+        return stars;
+
+    }
+
+
+    /* =====================================================
+       LOAD REVIEWS
+    ===================================================== */
+
+    async function loadReviews() {
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/reviews/restaurant/${restaurantId}`
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load reviews"
+                );
+
+            }
+
+
+            const reviews =
+                await response.json();
+
+
+            const reviewsList =
+                document.getElementById(
+                    "reviewsList"
+                );
+
+
+            reviewsList.innerHTML = "";
+
+
+            document.getElementById(
+                "ratingCount"
+            ).textContent =
+                reviews.length === 0
+                    ? "No reviews yet"
+                    : `${reviews.length} review${reviews.length > 1 ? "s" : ""}`;
+
+
+            if (reviews.length === 0) {
+
+                reviewsList.innerHTML = `
+                    <div class="info-message">
+                        No reviews yet.
+                        Be the first customer to review
+                        this restaurant! ⭐
+                    </div>
+                `;
+
+                return;
+
+            }
+
+
+            reviews.forEach(function(review) {
+
+                const reviewCard =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                reviewCard.className =
+                    "review-card";
+
+
+                reviewCard.innerHTML = `
+
+                    <div class="review-top">
+
+                        <span class="review-user">
+                            👤 Customer #${review.userId}
+                        </span>
+
+                        <span class="review-stars">
+                            ${createStars(review.rating)}
+                        </span>
+
+                    </div>
+
+                    <p class="review-comment-text">
+                        ${review.comment || "No comment provided."}
+                    </p>
+
+                `;
+
+
+                reviewsList.appendChild(
+                    reviewCard
+                );
+
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "Reviews loading error:",
+                error
+            );
+
+
+            document.getElementById(
+                "reviewsList"
+            ).innerHTML = `
+                <div class="info-message">
+                    Unable to load reviews.
+                </div>
+            `;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       LOAD USER ORDERS FOR REVIEW
+    ===================================================== */
+
+    async function loadReviewOrders() {
+
+        const reviewInfo =
+            document.getElementById(
+                "reviewInfo"
+            );
+
+
+        const reviewFormContent =
+            document.getElementById(
+                "reviewFormContent"
+            );
+
+
+        try {
+
+            const currentUser =
+                getCurrentUserFromToken();
+
+
+            if (!currentUser ||
+                !currentUser.email) {
+
+                throw new Error(
+                    "Login information not found"
+                );
+
+            }
+
+
+            /* ================= GET USER ================= */
+
+            const userResponse =
+                await fetch(
+                    `/api/users/by-email?email=${encodeURIComponent(currentUser.email)}`,
+                    {
+                        headers: {
+                            "Authorization":
+                                "Bearer " + token
+                        }
+                    }
+                );
+
+
+            if (!userResponse.ok) {
+
+                throw new Error(
+                    "Unable to find current user"
+                );
+
+            }
+
+
+            const user =
+                await userResponse.json();
+
+
+            window.currentUserId =
+                user.id;
+
+
+            /* ================= GET ORDERS ================= */
+
+            const ordersResponse =
+                await fetch(
+                    `/api/orders/user/${user.id}`,
+                    {
+                        headers: {
+                            "Authorization":
+                                "Bearer " + token
+                        }
+                    }
+                );
+
+
+            if (!ordersResponse.ok) {
+
+                throw new Error(
+                    "Unable to load your orders"
+                );
+
+            }
+
+
+            const orders =
+                await ordersResponse.json();
+
+
+            if (!Array.isArray(orders)) {
+
+                throw new Error(
+                    "Invalid orders response"
+                );
+
+            }
+
+
+            /* ================= DELIVERED ORDERS ================= */
+
+            const deliveredOrders =
+                orders.filter(
+                    function(order) {
+
+                        return (
+
+                            String(
+                                order.restaurantId
+                            ) ===
+                            String(
+                                restaurantId
+                            )
+
+                            &&
+
+                            String(
+                                order.status || ""
+                            ).toUpperCase() ===
+                            "DELIVERED"
+
+                        );
+
+                    }
+                );
+
+
+            if (deliveredOrders.length === 0) {
+
+                reviewFormContent.style.display =
+                    "none";
+
+                reviewInfo.style.display =
+                    "block";
+
+                reviewInfo.innerHTML = `
+                    📦 You can write a review
+                    after an order from this restaurant
+                    has been delivered.
+                `;
+
+                return;
+
+            }
+
+
+            /*
+             * We intentionally don't block the form if
+             * the review-check endpoint has an issue.
+             *
+             * The backend itself already prevents
+             * duplicate reviews.
+             */
+
+            const availableOrders = [];
+
+
+            for (
+                const order of deliveredOrders
+            ) {
+
+                try {
+
+                    const checkResponse =
+                        await fetch(
+                            `/api/reviews/check/${user.id}/${order.id}`,
+                            {
+                                headers: {
+                                    "Authorization":
+                                        "Bearer " + token
+                                }
+                            }
+                        );
+
+
+                    if (checkResponse.ok) {
+
+                        const alreadyReviewed =
+                            await checkResponse.json();
+
+
+                        if (!alreadyReviewed) {
+
+                            availableOrders.push(
+                                order
+                            );
+
+                        }
+
+                    } else {
+
+                        /*
+                         * If check API fails,
+                         * still show the order.
+                         * Backend will handle duplicate review.
+                         */
+
+                        availableOrders.push(
+                            order
+                        );
+
+                    }
+
+
+                } catch (checkError) {
+
+                    console.warn(
+                        "Review check unavailable:",
+                        checkError
+                    );
+
+
+                    availableOrders.push(
+                        order
+                    );
+
+                }
+
+            }
+
+
+            /* ================= NO AVAILABLE ORDERS ================= */
+
+            if (availableOrders.length === 0) {
+
+                reviewFormContent.style.display =
+                    "none";
+
+                reviewInfo.style.display =
+                    "block";
+
+                reviewInfo.innerHTML = `
+                    ⭐ You have already reviewed
+                    all your delivered orders from
+                    this restaurant.
+                `;
+
+                return;
+
+            }
+
+
+            /* ================= ORDER DROPDOWN ================= */
+
+            const orderSelect =
+                document.getElementById(
+                    "orderSelect"
+                );
+
+
+            orderSelect.innerHTML = `
+                <option value="">
+                    Select your delivered order
+                </option>
+            `;
+
+
+            availableOrders.forEach(
+                function(order) {
+
+                    const option =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    option.value =
+                        order.id;
+
+
+                    option.textContent =
+                        `Order #${order.id} • ₹${order.totalPrice || 0} • ${order.status}`;
+
+
+                    orderSelect.appendChild(
+                        option
+                    );
+
+                }
+            );
+
+
+            reviewInfo.style.display =
+                "none";
+
+
+            reviewFormContent.style.display =
+                "block";
+
+
+        } catch (error) {
+
+            console.error(
+                "Review orders error:",
+                error
+            );
+
+
+            reviewFormContent.style.display =
+                "none";
+
+
+            reviewInfo.style.display =
+                "block";
+
+
+            reviewInfo.innerHTML = `
+                ⚠️ ${error.message}
+            `;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       STAR SELECTION
+    ===================================================== */
+
+    let selectedRating = 0;
+
+
+    function selectRating(rating) {
+
+        selectedRating =
+            rating;
+
+
+        const buttons =
+            document.querySelectorAll(
+                ".star-btn"
+            );
+
+
+        buttons.forEach(
+            function(button, index) {
+
+                button.classList.toggle(
+                    "active",
+                    index < rating
+                );
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       SUBMIT REVIEW
+    ===================================================== */
+
+    async function submitReview() {
+
+        const orderId =
+            document.getElementById(
+                "orderSelect"
+            ).value;
+
+
+        const comment =
+            document.getElementById(
+                "reviewComment"
+            ).value.trim();
+
+
+        const message =
+            document.getElementById(
+                "reviewMessage"
+            );
+
+
+        const submitButton =
+            document.getElementById(
+                "submitReviewButton"
+            );
+
+
+        message.textContent = "";
+
+        message.className =
+            "review-message";
+
+
+        /* ================= VALIDATION ================= */
+
+        if (!orderId) {
+
+            message.textContent =
+                "Please select your delivered order.";
+
+            message.classList.add(
+                "error-message"
+            );
+
+            return;
+
+        }
+
+
+        if (
+            selectedRating < 1 ||
+            selectedRating > 5
+        ) {
+
+            message.textContent =
+                "Please select a rating from 1 to 5 stars.";
+
+            message.classList.add(
+                "error-message"
+            );
+
+            return;
+
+        }
+
+
+        if (!comment) {
+
+            message.textContent =
+                "Please write a comment.";
+
+            message.classList.add(
+                "error-message"
+            );
+
+            return;
+
+        }
+
+
+        if (!window.currentUserId) {
+
+            message.textContent =
+                "Unable to identify current user.";
+
+            message.classList.add(
+                "error-message"
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            submitButton.disabled =
+                true;
+
+            submitButton.textContent =
+                "Submitting...";
+
+
+            const response =
+                await fetch(
+                    "/api/reviews",
+                    {
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                "Bearer " + token
+
+                        },
+
+                        body: JSON.stringify({
+
+                            userId:
+                                Number(
+                                    window.currentUserId
+                                ),
+
+                            restaurantId:
+                                Number(
+                                    restaurantId
+                                ),
+
+                            orderId:
+                                Number(
+                                    orderId
+                                ),
+
+                            rating:
+                                Number(
+                                    selectedRating
+                                ),
+
+                            comment:
+                                comment
+
+                        })
+
+                    }
+                );
+
+
+            const text =
+                await response.text();
+
+
+            let result;
+
+
+            try {
+
+                result =
+                    JSON.parse(text);
+
+            } catch {
+
+                result =
+                    text;
+
+            }
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    typeof result === "string"
+                        ? result
+                        : "Unable to submit review"
+                );
+
+            }
+
+
+            /* ================= SUCCESS ================= */
+
+            message.textContent =
+                "Review submitted successfully! ⭐";
+
+            message.classList.add(
+                "success-message"
+            );
+
+
+            document.getElementById(
+                "reviewComment"
+            ).value = "";
+
+
+            document.getElementById(
+                "orderSelect"
+            ).value = "";
+
+
+            selectRating(0);
+
+
+            await loadReviews();
+
+            await loadRestaurantRating();
+
+
+            /*
+             * Refresh review orders so the
+             * reviewed order disappears.
+             */
+
+            setTimeout(
+                function() {
+
+                    loadReviewOrders();
+
+                },
+                500
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Review submission error:",
+                error
+            );
+
+
+            message.textContent =
+                error.message ||
+                "Unable to submit review.";
+
+            message.classList.add(
+                "error-message"
+            );
+
+
+        } finally {
+
+            submitButton.disabled =
+                false;
+
+            submitButton.textContent =
+                "Submit Review";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       CART
+    ===================================================== */
+
+    function addToCart(itemId) {
+
+        let cart =
+            JSON.parse(
+                localStorage.getItem(
+                    "foodiesCart"
+                )
+            ) || [];
+
+
+        const menuCards =
+            document.querySelectorAll(
+                ".menu-card"
+            );
+
+
+        let selectedItem =
+            null;
+
+
+        menuCards.forEach(
+            function(card) {
+
+                const button =
+                    card.querySelector(
+                        ".add-cart-btn"
+                    );
+
+
+                if (
+                    button &&
+                    button.getAttribute(
+                        "onclick"
+                    ) ===
+                    `addToCart(${itemId})`
+                ) {
+
+                    const name =
+                        card.querySelector(
+                            "h3"
+                        ).textContent;
+
+
+                    const priceText =
+                        card.querySelector(
+                            ".food-price"
+                        ).textContent;
+
+
+                    const price =
+                        parseFloat(
+                            priceText.replace(
+                                "₹",
+                                ""
+                            )
+                        );
+
+
+                    selectedItem = {
+
+                        id:
+                            itemId,
+
+                        name:
+                            name,
+
+                        price:
+                            price
+
+                    };
+
+                }
+
+            }
+        );
+
+
+        if (!selectedItem) {
+
+            alert(
+                "Unable to add item."
+            );
+
+            return;
+
+        }
+
+
+        const existingItem =
+            cart.find(
+                function(item) {
+
+                    return (
+                        Number(item.id) ===
+                        Number(itemId)
+                    );
+
+                }
+            );
+
+
+        if (existingItem) {
+
+            existingItem.quantity += 1;
+
+        } else {
+
+            cart.push({
+
+                id:
+                    selectedItem.id,
+
+                name:
+                    selectedItem.name,
+
+                price:
+                    selectedItem.price,
+
+                quantity:
+                    1,
+
+                restaurantId:
+                    Number(
+                        restaurantId
+                    )
+
+            });
+
+        }
+
+
+        localStorage.setItem(
+            "foodiesCart",
+            JSON.stringify(cart)
+        );
+
+
+        updateCartCount();
+
+
+        alert(
+            "Item added to cart 🛒"
+        );
+
+    }
+
+
+    /* =====================================================
+       CART COUNT
+    ===================================================== */
+
+    function updateCartCount() {
+
+        const cart =
+            JSON.parse(
+                localStorage.getItem(
+                    "foodiesCart"
+                )
+            ) || [];
+
+
+        let count = 0;
+
+
+        cart.forEach(
+            function(item) {
+
+                count +=
+                    Number(
+                        item.quantity
+                    ) || 0;
+
+            }
+        );
+
+
+        document.getElementById(
+            "cartCount"
+        ).textContent =
+            `(${count})`;
+
+    }
+
+
+    /* =====================================================
+       NAVIGATION
+    ===================================================== */
+
+    function openCart() {
+
+        window.location.href =
+            "cart.html";
+
+    }
+
+
+    function goBack() {
+
+        window.location.href =
+            "restaurants.html";
+
+    }
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Offers & Coupons | Foodies</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f7f7f7;
+            color: #222;
+        }
+
+        .coupons-header {
+            background: #ffffff;
+            border-bottom: 1px solid #eeeeee;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: #ff6b00;
+        }
+
+        .back-btn {
+            border: none;
+            background: #fff1e8;
+            color: #ff6b00;
+            padding: 10px 18px;
+            border-radius: 9px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .coupons-container {
+            width: 88%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 40px 0;
+        }
+
+        .page-title {
+            margin-bottom: 30px;
+        }
+
+        .page-title h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+        }
+
+        .page-title p {
+            margin: 0;
+            color: #777;
+        }
+
+        .coupon-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .coupon-card {
+            background: white;
+            border-radius: 18px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            border-left: 5px solid #ff6b00;
+        }
+
+        .coupon-icon {
+            font-size: 35px;
+            margin-bottom: 15px;
+        }
+
+        .coupon-code {
+            display: inline-block;
+            background: #fff1e8;
+            color: #ff6b00;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        .coupon-discount {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .coupon-minimum {
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .coupon-expiry {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .empty-message {
+            text-align: center;
+            background: white;
+            padding: 45px 20px;
+            border-radius: 18px;
+            color: #777;
+            display: none;
+        }
+
+        .error-message {
+            text-align: center;
+            background: #fff1f1;
+            color: #d93025;
+            padding: 20px;
+            border-radius: 12px;
+            display: none;
+        }
+
+        @media (max-width: 900px) {
+            .coupon-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .coupon-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .coupons-header {
+                padding: 15px 4%;
+            }
+
+            .coupons-container {
+                width: 92%;
+            }
+
+            .page-title h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+    <script src="js/notifications.js"></script>
+
+</head>
+
+<body>
+
+<header class="coupons-header">
+
+    <div class="logo">
+        🍔 Foodies
+    </div>
+
+    <button class="back-btn"
+            onclick="window.location.href='customer-dashboard.html'">
+        ← Dashboard
+    </button>
+
+</header>
+
+
+<main class="coupons-container">
+
+    <div class="page-title">
+
+        <h1>🎁 Offers & Coupons</h1>
+
+        <p>
+            Save more on your favourite food with our latest offers.
+        </p>
+
+    </div>
+
+
+    <div id="couponGrid" class="coupon-grid"></div>
+
+
+    <div id="emptyMessage" class="empty-message">
+
+        <h2>😔 No Offers Available</h2>
+
+        <p>
+            There are currently no active coupons.
+            Please check again later.
+        </p>
+
+    </div>
+
+
+    <div id="errorMessage" class="error-message">
+
+        Unable to load coupons. Please try again later.
+
+    </div>
+
+</main>
+
+
+<script>
+
+    /* =========================
+       AUTHENTICATION
+    ========================= */
+
+    const token = localStorage.getItem("foodiesToken");
+
+    if (!token) {
+
+        window.location.href = "login.html";
+
+    }
+
+
+    /* =========================
+       LOAD COUPONS
+    ========================= */
+
+    async function loadCoupons() {
+
+        const couponGrid =
+            document.getElementById("couponGrid");
+
+        const emptyMessage =
+            document.getElementById("emptyMessage");
+
+        const errorMessage =
+            document.getElementById("errorMessage");
+
+
+        try {
+
+            const response = await fetch(
+                "/api/coupons",
+                {
+                    method: "GET",
+
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                }
+            );
+
+
+            if (response.status === 401 || response.status === 403) {
+
+                console.error(
+                    "Coupon API unauthorized:",
+                    response.status
+                );
+
+                localStorage.removeItem("foodiesToken");
+
+                window.location.href = "login.html";
+
+                return;
+
+            }
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Failed to load coupons"
+                );
+
+            }
+
+
+            const coupons =
+                await response.json();
+
+
+            if (!coupons || coupons.length === 0) {
+
+                emptyMessage.style.display = "block";
+
+                return;
+
+            }
+
+
+            couponGrid.innerHTML = "";
+
+
+            coupons.forEach(function(coupon) {
+
+                const card =
+                    document.createElement("div");
+
+                card.className =
+                    "coupon-card";
+
+
+                card.innerHTML = `
+
+                    <div class="coupon-icon">
+                        🎟️
+                    </div>
+
+                    <div class="coupon-code">
+                        ${coupon.code}
+                    </div>
+
+                    <div class="coupon-discount">
+                        ₹${coupon.discount} OFF
+                    </div>
+
+                    <div class="coupon-minimum">
+                        Minimum order:
+                        ₹${coupon.minimumOrder}
+                    </div>
+
+                    <div class="coupon-expiry">
+                        Valid till:
+                        ${coupon.expiryDate}
+                    </div>
+
+                `;
+
+
+                couponGrid.appendChild(card);
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Coupon loading error:",
+                error
+            );
+
+            errorMessage.style.display =
+                "block";
+
+        }
+
+    }
+
+
+    /* =========================
+       START
+    ========================= */
+
+    loadCoupons();
+
+</script>
+
+</body>
+</html>

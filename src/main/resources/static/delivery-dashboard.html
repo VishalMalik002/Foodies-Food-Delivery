@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Foodies - Delivery Dashboard</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        .header {
+            background: #ff4d2d;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: white;
+            color: #ff4d2d;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 35px;
+        }
+
+        .welcome {
+            margin-bottom: 30px;
+        }
+
+        .welcome h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .welcome p {
+            color: #666;
+        }
+
+        .partner-info {
+            background: white;
+            padding: 22px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .partner-info h2 {
+            margin-bottom: 10px;
+        }
+
+        .availability {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 7px 14px;
+            border-radius: 20px;
+            background: #e9f9ef;
+            color: #16803a;
+            font-weight: bold;
+        }
+
+        .orders-title {
+            margin-bottom: 18px;
+        }
+
+        .orders-container {
+            display: grid;
+            gap: 20px;
+        }
+
+        .order-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .order-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .order-id {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .status {
+            background: #fff1ed;
+            color: #ff4d2d;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .order-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .detail-box {
+            background: #f8f9fc;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .label {
+            display: block;
+            color: #777;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .value {
+            font-weight: bold;
+            word-break: break-word;
+        }
+
+        .status-control {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .status-control select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-right: 8px;
+        }
+
+        .update-btn {
+            padding: 10px 16px;
+            border: none;
+            border-radius: 8px;
+            background: #ff4d2d;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .empty-box {
+            background: white;
+            padding: 50px 20px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .empty-box .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .empty-box h2 {
+            margin-bottom: 8px;
+        }
+
+        .empty-box p {
+            color: #777;
+        }
+
+        @media (max-width: 700px) {
+
+            .header {
+                padding: 18px 20px;
+            }
+
+            .container {
+                padding: 25px 18px;
+            }
+
+            .order-details {
+                grid-template-columns: 1fr;
+            }
+
+            .order-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .welcome h1 {
+                font-size: 27px;
+            }
+
+        }
+    </style>
+    <script src="js/notifications.js"></script>
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="logo">
+        🛵 Foodies Delivery
+    </div>
+
+    <button class="logout-btn" onclick="logout()">
+        Logout
+    </button>
+
+</header>
+
+
+<main class="container">
+
+    <div class="welcome">
+
+        <h1>Delivery Partner Dashboard</h1>
+
+        <p>
+            Manage your assigned Foodies deliveries.
+        </p>
+
+    </div>
+
+
+    <div class="partner-info">
+
+        <h2>🛵 Delivery Partner</h2>
+
+        <p id="partnerName">
+            Loading partner information...
+        </p>
+
+        <span class="availability">
+            AVAILABLE
+        </span>
+
+    </div>
+
+
+    <h2 class="orders-title">
+        📦 Assigned Orders
+    </h2>
+
+
+    <div
+        id="ordersContainer"
+        class="orders-container"
+    >
+
+        <div class="empty-box">
+
+            <div class="icon">⏳</div>
+
+            <h2>Loading Orders...</h2>
+
+            <p>
+                Please wait...
+            </p>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+    const token =
+        localStorage.getItem("foodiesToken");
+
+
+    if (!token) {
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    let deliveryPartnerId = null;
+
+
+    function getTokenPayload() {
+
+        return JSON.parse(
+            atob(
+                token
+                    .split(".")[1]
+                    .replace(/-/g, "+")
+                    .replace(/_/g, "/")
+            )
+        );
+
+    }
+
+
+    async function loadPartner() {
+
+        try {
+
+            const payload =
+                getTokenPayload();
+
+            const email =
+                payload.sub;
+
+
+            const response =
+                await fetch(
+                    `/api/users/by-email?email=${encodeURIComponent(email)}`,
+                    {
+                        headers: {
+                            "Authorization":
+                                "Bearer " + token
+                        }
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "User not found"
+                );
+
+            }
+
+
+            const user =
+                await response.json();
+
+
+            document.getElementById(
+                "partnerName"
+            ).textContent =
+                user.name;
+
+
+            /*
+             * Current test data uses
+             * Delivery Partner ID 2.
+             */
+            deliveryPartnerId = 2;
+
+
+            loadOrders();
+
+
+        } catch (error) {
+
+            console.error(
+                "Partner loading error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    async function loadOrders() {
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/orders/delivery-partner/${deliveryPartnerId}`,
+                    {
+                        headers: {
+                            "Authorization":
+                                "Bearer " + token
+                        }
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load orders"
+                );
+
+            }
+
+
+            const orders =
+                await response.json();
+
+
+            const container =
+                document.getElementById(
+                    "ordersContainer"
+                );
+
+
+            if (orders.length === 0) {
+
+                container.innerHTML = `
+
+                    <div class="empty-box">
+
+                        <div class="icon">📦</div>
+
+                        <h2>No Assigned Orders</h2>
+
+                        <p>
+                            You currently have no deliveries assigned.
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            container.innerHTML = "";
+
+
+            orders.forEach(function(order) {
+
+                const card =
+                    document.createElement("div");
+
+                card.className =
+                    "order-card";
+
+
+                card.innerHTML = `
+
+                    <div class="order-top">
+
+                        <div class="order-id">
+                            Order #${order.id}
+                        </div>
+
+                        <div class="status">
+                            ${order.status || "PLACED"}
+                        </div>
+
+                    </div>
+
+
+                    <div class="order-details">
+
+                        <div class="detail-box">
+
+                            <span class="label">
+                                Customer ID
+                            </span>
+
+                            <span class="value">
+                                ${order.userId || "N/A"}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-box">
+
+                            <span class="label">
+                                Restaurant ID
+                            </span>
+
+                            <span class="value">
+                                ${order.restaurantId || "N/A"}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-box">
+
+                            <span class="label">
+                                Amount
+                            </span>
+
+                            <span class="value">
+                                ₹${order.totalPrice || 0}
+                            </span>
+
+                        </div>
+
+
+                        <div class="detail-box">
+
+                            <span class="label">
+                                Delivery Address
+                            </span>
+
+                            <span class="value">
+                                ${order.deliveryAddress || "Not available"}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="status-control">
+
+                        <strong>
+                            Update Delivery Status
+                        </strong>
+
+                        <br><br>
+
+                        <select
+                            id="status-${order.id}"
+                        >
+
+                            <option value="CONFIRMED"
+                                ${order.status === "CONFIRMED" ? "selected" : ""}>
+                                CONFIRMED
+                            </option>
+
+                            <option value="PREPARING"
+                                ${order.status === "PREPARING" ? "selected" : ""}>
+                                PREPARING
+                            </option>
+
+                            <option value="OUT_FOR_DELIVERY"
+                                ${order.status === "OUT_FOR_DELIVERY" ? "selected" : ""}>
+                                OUT FOR DELIVERY
+                            </option>
+
+                            <option value="DELIVERED"
+                                ${order.status === "DELIVERED" ? "selected" : ""}>
+                                DELIVERED
+                            </option>
+
+                        </select>
+
+
+                        <button
+                            class="update-btn"
+                            onclick="updateOrderStatus(${order.id})"
+                        >
+                            Update
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                container.appendChild(card);
+
+            });
+
+
+        } catch (error) {
+
+            console.error(
+                "Delivery orders error:",
+                error
+            );
+
+
+            document.getElementById(
+                "ordersContainer"
+            ).innerHTML = `
+
+                <div class="empty-box">
+
+                    <div class="icon">⚠️</div>
+
+                    <h2>Unable to Load Orders</h2>
+
+                    <p>
+                        Please check the server.
+                    </p>
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+
+    async function updateOrderStatus(orderId) {
+
+        const status =
+            document.getElementById(
+                "status-" + orderId
+            ).value;
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/orders/${orderId}/status?status=${encodeURIComponent(status)}`,
+                    {
+                        method: "PUT",
+
+                        headers: {
+                            "Authorization":
+                                "Bearer " + token
+                        }
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Status update failed"
+                );
+
+            }
+
+
+            alert(
+                "Order #" +
+                orderId +
+                " updated to " +
+                status
+            );
+
+
+            loadOrders();
+
+
+        } catch (error) {
+
+            console.error(
+                "Status update error:",
+                error
+            );
+
+            alert(
+                "Unable to update order status."
+            );
+
+        }
+
+    }
+
+
+    function logout() {
+
+        localStorage.removeItem(
+            "foodiesToken"
+        );
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    loadPartner();
+
+</script>
+
+</body>
+</html>

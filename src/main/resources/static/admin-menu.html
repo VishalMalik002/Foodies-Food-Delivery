@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Foodies - Menu Management</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg, #ff4d2d, #ff7043);
+            color: white;
+            padding: 22px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            background: white;
+            color: #ff4d2d;
+
+            border: none;
+            padding: 11px 18px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* MAIN */
+
+        .container {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .top-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 25px;
+
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .title h1 {
+            font-size: 30px;
+            margin-bottom: 6px;
+        }
+
+        .title p {
+            color: #777;
+        }
+
+        .add-btn {
+            background: #ff4d2d;
+            color: white;
+
+            border: none;
+
+            padding: 13px 20px;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        /* FILTER */
+
+        .filter-box {
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 12px;
+
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+
+            margin-bottom: 25px;
+        }
+
+        .filter-box label {
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 8px;
+        }
+
+        .filter-box select {
+            width: 100%;
+            max-width: 450px;
+
+            padding: 12px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 8px;
+
+            font-size: 15px;
+        }
+
+        /* MENU GRID */
+
+        .menu-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit, minmax(280px, 1fr));
+
+            gap: 20px;
+        }
+
+        .menu-card {
+            background: white;
+
+            border-radius: 14px;
+
+            padding: 20px;
+
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+
+            transition: 0.2s;
+        }
+
+        .menu-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .menu-image {
+            height: 150px;
+
+            border-radius: 10px;
+
+            background: #fff1ed;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            font-size: 55px;
+
+            margin-bottom: 16px;
+
+            overflow: hidden;
+        }
+
+        .menu-image img {
+            width: 100%;
+            height: 100%;
+
+            object-fit: cover;
+        }
+
+        .menu-card h3 {
+            font-size: 21px;
+
+            margin-bottom: 8px;
+        }
+
+        .category {
+            display: inline-block;
+
+            background: #fff0eb;
+
+            color: #ff4d2d;
+
+            padding: 5px 10px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            margin-bottom: 10px;
+        }
+
+        .description {
+            color: #777;
+
+            font-size: 14px;
+
+            line-height: 1.5;
+
+            min-height: 42px;
+
+            margin-bottom: 12px;
+        }
+
+        .price {
+            font-size: 20px;
+
+            font-weight: bold;
+
+            margin-bottom: 10px;
+        }
+
+        .availability {
+            font-size: 13px;
+
+            font-weight: bold;
+
+            margin-bottom: 15px;
+        }
+
+        .available {
+            color: #28a745;
+        }
+
+        .unavailable {
+            color: #dc3545;
+        }
+
+        /* BUTTONS */
+
+        .actions {
+            display: flex;
+
+            gap: 10px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            flex: 1;
+
+            padding: 10px;
+
+            border: none;
+
+            border-radius: 7px;
+
+            cursor: pointer;
+
+            font-weight: bold;
+        }
+
+        .edit-btn {
+            background: #eef4ff;
+            color: #2864d7;
+        }
+
+        .delete-btn {
+            background: #fff0f0;
+            color: #dc3545;
+        }
+
+        /* EMPTY */
+
+        .empty {
+            background: white;
+
+            padding: 45px;
+
+            text-align: center;
+
+            border-radius: 12px;
+
+            color: #777;
+
+            box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+        }
+
+        /* MODAL */
+
+        .modal {
+            display: none;
+
+            position: fixed;
+
+            inset: 0;
+
+            background: rgba(0,0,0,0.55);
+
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+
+            width: 100%;
+
+            max-width: 600px;
+
+            max-height: 90vh;
+
+            overflow-y: auto;
+
+            border-radius: 15px;
+
+            padding: 28px;
+        }
+
+        .modal-header {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 22px;
+        }
+
+        .modal-header h2 {
+            color: #222;
+        }
+
+        .close {
+            font-size: 28px;
+
+            cursor: pointer;
+
+            color: #777;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+
+            width: 100%;
+
+            padding: 11px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 8px;
+
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 90px;
+
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 15px;
+        }
+
+        .save-btn {
+            width: 100%;
+
+            padding: 13px;
+
+            background: #ff4d2d;
+
+            color: white;
+
+            border: none;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            margin-top: 8px;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 600px) {
+
+            .header {
+                padding: 18px 20px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .title h1 {
+                font-size: 25px;
+            }
+
+        }
+
+    </style>
+
+    <script src="js/notifications.js"></script>
+
+</head>
+
+
+<body>
+
+
+    <!-- HEADER -->
+
+    <div class="header">
+
+        <div class="logo">
+            🍔 Foodies Admin
+        </div>
+
+        <button
+            class="back-btn"
+            onclick="window.location.href='admin-dashboard.html'">
+
+            ← Dashboard
+
+        </button>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="container">
+
+
+        <div class="top-section">
+
+            <div class="title">
+
+                <h1>
+                    Menu Management
+                </h1>
+
+                <p>
+                    Add, edit and manage restaurant menu items
+                </p>
+
+            </div>
+
+
+            <button
+                class="add-btn"
+                onclick="openAddModal()">
+
+                + Add Menu Item
+
+            </button>
+
+        </div>
+
+
+        <!-- RESTAURANT FILTER -->
+
+        <div class="filter-box">
+
+            <label>
+                Select Restaurant
+            </label>
+
+            <select
+                id="restaurantSelect"
+                onchange="loadMenuItems()">
+
+                <option value="">
+                    Select a restaurant
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- MENU ITEMS -->
+
+        <div id="menuContainer">
+
+            <div class="empty">
+
+                Please select a restaurant
+                to view menu items.
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- ADD / EDIT MODAL -->
+
+    <div
+        id="menuModal"
+        class="modal">
+
+
+        <div class="modal-content">
+
+
+            <div class="modal-header">
+
+                <h2 id="modalTitle">
+                    Add Menu Item
+                </h2>
+
+                <span
+                    class="close"
+                    onclick="closeModal()">
+
+                    &times;
+
+                </span>
+
+            </div>
+
+
+            <form
+                id="menuForm"
+                onsubmit="saveMenuItem(event)">
+
+
+                <input
+                    type="hidden"
+                    id="menuItemId">
+
+
+                <!-- RESTAURANT -->
+
+                <div class="form-group">
+
+                    <label>
+                        Restaurant
+                    </label>
+
+                    <select
+                        id="formRestaurant"
+                        required>
+
+                    </select>
+
+                </div>
+
+
+                <!-- NAME -->
+
+                <div class="form-group">
+
+                    <label>
+                        Item Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="itemName"
+                        placeholder="e.g. Paneer Butter Masala"
+                        required>
+
+                </div>
+
+
+                <!-- DESCRIPTION -->
+
+                <div class="form-group">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea
+                        id="itemDescription"
+                        placeholder="Enter menu item description"
+                        required>
+                    </textarea>
+
+                </div>
+
+
+                <!-- PRICE + CATEGORY -->
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Price (₹)
+                        </label>
+
+                        <input
+                            type="number"
+                            id="itemPrice"
+                            step="0.01"
+                            min="0"
+                            placeholder="220"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Category
+                        </label>
+
+                        <input
+                            type="text"
+                            id="itemCategory"
+                            placeholder="Main Course"
+                            required>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- IMAGE -->
+
+                <div class="form-group">
+
+                    <label>
+                        Image URL
+                    </label>
+
+                    <input
+                        type="text"
+                        id="itemImage"
+                        placeholder="https://example.com/image.jpg">
+
+                </div>
+
+
+                <!-- AVAILABILITY -->
+
+                <div class="form-group">
+
+                    <label>
+                        Availability
+                    </label>
+
+                    <select id="itemAvailable">
+
+                        <option value="true">
+                            Available
+                        </option>
+
+                        <option value="false">
+                            Unavailable
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="save-btn">
+
+                    Save Menu Item
+
+                </button>
+
+
+            </form>
+
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+
+        const token =
+            localStorage.getItem("foodiesToken");
+
+
+        /* SECURITY CHECK */
+
+        if (!token) {
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        let restaurants = [];
+
+        let currentMenuItems = [];
+
+
+        /* LOAD RESTAURANTS */
+
+        async function loadRestaurants() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/restaurants"
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to load restaurants"
+                    );
+
+                }
+
+
+                restaurants =
+                    await response.json();
+
+
+                const select =
+                    document.getElementById(
+                        "restaurantSelect"
+                    );
+
+
+                const formSelect =
+                    document.getElementById(
+                        "formRestaurant"
+                    );
+
+
+                restaurants.forEach(
+                    restaurant => {
+
+
+                        const option =
+                            document.createElement(
+                                "option"
+                            );
+
+
+                        option.value =
+                            restaurant.id;
+
+
+                        option.textContent =
+                            restaurant.name;
+
+
+                        select.appendChild(
+                            option
+                        );
+
+
+                        const formOption =
+                            document.createElement(
+                                "option"
+                            );
+
+
+                        formOption.value =
+                            restaurant.id;
+
+
+                        formOption.textContent =
+                            restaurant.name;
+
+
+                        formSelect.appendChild(
+                            formOption
+                        );
+
+
+                    }
+                );
+
+
+            } catch (error) {
+
+                console.error(error);
+
+                alert(
+                    "Unable to load restaurants."
+                );
+
+            }
+
+        }
+
+
+        /* LOAD MENU */
+
+        async function loadMenuItems() {
+
+
+            const restaurantId =
+                document.getElementById(
+                    "restaurantSelect"
+                ).value;
+
+
+            const container =
+                document.getElementById(
+                    "menuContainer"
+                );
+
+
+            if (!restaurantId) {
+
+                container.innerHTML = `
+
+                    <div class="empty">
+
+                        Please select a restaurant
+                        to view menu items.
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+
+                        `/api/menu-items/restaurant/${restaurantId}`,
+
+                        {
+
+                            headers: {
+
+                                "Authorization":
+                                    "Bearer " + token
+
+                            }
+
+                        }
+
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Unable to load menu items"
+                    );
+
+                }
+
+
+                currentMenuItems =
+                    await response.json();
+
+
+                renderMenuItems();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+
+                container.innerHTML = `
+
+                    <div class="empty">
+
+                        Unable to load menu items.
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        /* DISPLAY MENU */
+
+        function renderMenuItems() {
+
+
+            const container =
+                document.getElementById(
+                    "menuContainer"
+                );
+
+
+            if (
+                currentMenuItems.length === 0
+            ) {
+
+                container.innerHTML = `
+
+                    <div class="empty">
+
+                        <h3>
+                            No menu items found
+                        </h3>
+
+                        <p style="margin-top:8px;">
+
+                            Add the first menu item
+                            for this restaurant.
+
+                        </p>
+
+                    </div>
+
+                `;
+
+                return;
+
+            }
+
+
+            let html =
+                '<div class="menu-grid">';
+
+
+            currentMenuItems.forEach(
+                item => {
+
+
+                    let image;
+
+
+                    if (
+                        item.imageUrl &&
+                        item.imageUrl.trim() !== ""
+                    ) {
+
+                        image = `
+
+                            <img
+                                src="${item.imageUrl}"
+                                alt="${item.name}">
+
+                        `;
+
+                    } else {
+
+                        image = "🍽️";
+
+                    }
+
+
+                    html += `
+
+                        <div class="menu-card">
+
+
+                            <div class="menu-image">
+
+                                ${image}
+
+                            </div>
+
+
+                            <span class="category">
+
+                                ${item.category || "Other"}
+
+                            </span>
+
+
+                            <h3>
+
+                                ${item.name}
+
+                            </h3>
+
+
+                            <p class="description">
+
+                                ${
+                                    item.description ||
+                                    "No description available"
+                                }
+
+                            </p>
+
+
+                            <div class="price">
+
+                                ₹${Number(item.price).toFixed(2)}
+
+                            </div>
+
+
+                            <div class="availability
+                                ${
+                                    item.available
+                                    ? "available"
+                                    : "unavailable"
+                                }">
+
+                                ${
+                                    item.available
+                                    ? "● Available"
+                                    : "● Unavailable"
+                                }
+
+                            </div>
+
+
+                            <div class="actions">
+
+
+                                <button
+                                    class="edit-btn"
+                                    onclick="openEditModal(${item.id})">
+
+                                    ✏️ Edit
+
+                                </button>
+
+
+                                <button
+                                    class="delete-btn"
+                                    onclick="deleteMenuItem(${item.id})">
+
+                                    🗑️ Delete
+
+                                </button>
+
+
+                            </div>
+
+
+                        </div>
+
+                    `;
+
+                }
+            );
+
+
+            html +=
+                "</div>";
+
+
+            container.innerHTML =
+                html;
+
+        }
+
+
+        /* ADD MODAL */
+
+        function openAddModal() {
+
+
+            document.getElementById(
+                "modalTitle"
+            ).textContent =
+                "Add Menu Item";
+
+
+            document.getElementById(
+                "menuForm"
+            ).reset();
+
+
+            document.getElementById(
+                "menuItemId"
+            ).value =
+                "";
+
+
+            const selectedRestaurant =
+                document.getElementById(
+                    "restaurantSelect"
+                ).value;
+
+
+            if (selectedRestaurant) {
+
+                document.getElementById(
+                    "formRestaurant"
+                ).value =
+                    selectedRestaurant;
+
+            }
+
+
+            document.getElementById(
+                "menuModal"
+            ).style.display =
+                "flex";
+
+        }
+
+
+        /* EDIT MODAL */
+
+        function openEditModal(id) {
+
+
+            const item =
+                currentMenuItems.find(
+                    menuItem =>
+                        menuItem.id === id
+                );
+
+
+            if (!item) {
+
+                return;
+
+            }
+
+
+            document.getElementById(
+                "modalTitle"
+            ).textContent =
+                "Edit Menu Item";
+
+
+            document.getElementById(
+                "menuItemId"
+            ).value =
+                item.id;
+
+
+            document.getElementById(
+                "formRestaurant"
+            ).value =
+                item.restaurantId;
+
+
+            document.getElementById(
+                "itemName"
+            ).value =
+                item.name || "";
+
+
+            document.getElementById(
+                "itemDescription"
+            ).value =
+                item.description || "";
+
+
+            document.getElementById(
+                "itemPrice"
+            ).value =
+                item.price || "";
+
+
+            document.getElementById(
+                "itemCategory"
+            ).value =
+                item.category || "";
+
+
+            document.getElementById(
+                "itemImage"
+            ).value =
+                item.imageUrl || "";
+
+
+            document.getElementById(
+                "itemAvailable"
+            ).value =
+                String(item.available);
+
+
+            document.getElementById(
+                "menuModal"
+            ).style.display =
+                "flex";
+
+        }
+
+
+        /* CLOSE MODAL */
+
+        function closeModal() {
+
+            document.getElementById(
+                "menuModal"
+            ).style.display =
+                "none";
+
+        }
+
+
+        /* SAVE MENU */
+
+        async function saveMenuItem(event) {
+
+
+            event.preventDefault();
+
+
+            const id =
+                document.getElementById(
+                    "menuItemId"
+                ).value;
+
+
+            const menuItem = {
+
+
+                restaurantId:
+                    Number(
+                        document.getElementById(
+                            "formRestaurant"
+                        ).value
+                    ),
+
+
+                name:
+                    document.getElementById(
+                        "itemName"
+                    ).value,
+
+
+                description:
+                    document.getElementById(
+                        "itemDescription"
+                    ).value,
+
+
+                price:
+                    Number(
+                        document.getElementById(
+                            "itemPrice"
+                        ).value
+                    ),
+
+
+                category:
+                    document.getElementById(
+                        "itemCategory"
+                    ).value,
+
+
+                imageUrl:
+                    document.getElementById(
+                        "itemImage"
+                    ).value,
+
+
+                available:
+                    document.getElementById(
+                        "itemAvailable"
+                    ).value === "true"
+
+            };
+
+
+            try {
+
+
+                const url =
+                    id
+
+                    ? `/api/menu-items/${id}`
+
+                    : "/api/menu-items";
+
+
+                const method =
+                    id
+                    ? "PUT"
+                    : "POST";
+
+
+                const response =
+                    await fetch(
+
+                        url,
+
+                        {
+
+                            method: method,
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json",
+
+                                "Authorization":
+                                    "Bearer " + token
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    menuItem
+                                )
+
+                        }
+
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Save failed"
+                    );
+
+                }
+
+
+                alert(
+
+                    id
+
+                    ? "Menu item updated successfully! ✅"
+
+                    : "Menu item added successfully! ✅"
+
+                );
+
+
+                closeModal();
+
+
+                loadMenuItems();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+
+                alert(
+                    "Unable to save menu item."
+                );
+
+            }
+
+        }
+
+
+        /* DELETE */
+
+        async function deleteMenuItem(id) {
+
+
+            const confirmDelete =
+                confirm(
+                    "Are you sure you want to delete this menu item?"
+                );
+
+
+            if (!confirmDelete) {
+
+                return;
+
+            }
+
+
+            try {
+
+
+                const response =
+                    await fetch(
+
+                        `/api/menu-items/${id}`,
+
+                        {
+
+                            method: "DELETE",
+
+                            headers: {
+
+                                "Authorization":
+                                    "Bearer " + token
+
+                            }
+
+                        }
+
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Delete failed"
+                    );
+
+                }
+
+
+                alert(
+                    "Menu item deleted successfully! ✅"
+                );
+
+
+                loadMenuItems();
+
+
+            } catch (error) {
+
+                console.error(error);
+
+
+                alert(
+                    "Unable to delete menu item."
+                );
+
+            }
+
+        }
+
+
+        /* CLOSE MODAL ON OUTSIDE CLICK */
+
+        window.onclick =
+            function(event) {
+
+
+                const modal =
+                    document.getElementById(
+                        "menuModal"
+                    );
+
+
+                if (
+                    event.target === modal
+                ) {
+
+                    closeModal();
+
+                }
+
+            };
+
+
+        /* START */
+
+        loadRestaurants();
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Foodies | Delicious Food Delivered</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Leaflet Map CSS -->
+    <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css"/>
+
+    <script src="js/notifications.js"></script>
+
+</head>
+
+<body>
+
+<!-- ================= NAVBAR ================= -->
+
+<header class="navbar">
+
+    <div class="nav-container">
+
+        <a href="#" class="logo">
+            <span class="logo-icon">✦</span>
+            <span>food<span>ies</span></span>
+        </a>
+
+        <nav class="nav-links">
+            <a href="#home" class="active">Home</a>
+            <a href="#restaurants">Restaurants</a>
+            <a href="#offers">Offers</a>
+            <a href="#about">About</a>
+        </nav>
+
+        <div class="nav-actions">
+
+            <button class="search-btn" aria-label="Search">
+                <span>⌕</span>
+            </button>
+
+            <button class="cart-btn" aria-label="Cart">
+                <span>🛒</span>
+                <small>0</small>
+            </button>
+
+            <button class="login-btn"
+            onclick="window.location.href='login.html'">Login</button>
+
+            <button class="signup-btn"
+            onclick="window.location.href='signup.html'">Sign Up</button>
+
+        </div>
+
+        <button class="menu-btn">☰</button>
+
+    </div>
+
+</header>
+
+    <!-- ================= LOCATION MODAL ================= -->
+
+<div class="location-modal" id="locationModal">
+
+    <div class="location-modal-box">
+
+        <button class="location-close" id="closeLocation">
+            ×
+        </button>
+
+        <div class="location-header">
+            <h2>📍 Select your location</h2>
+            <p>Choose your delivery location</p>
+        </div>
+
+        <div class="location-search">
+            <span>🔍</span>
+            <input
+                type="text"
+                id="locationSearch"
+                placeholder="Search area, street or city..."
+            >
+        </div>
+
+        <button class="current-location-btn" id="currentLocation">
+            📍 Use my current location
+        </button>
+
+        <div id="map"></div>
+
+        <div class="selected-location">
+
+            <div>
+                <small>Selected Location</small>
+                <strong id="selectedAddress">
+                    Select a location on map
+                </strong>
+            </div>
+
+        </div>
+
+        <div class="restaurant-distance" id="restaurantDistance">
+
+                🍽️
+            <span>
+        Restaurant distance:
+        <strong id="distanceValue">Calculating...</strong>
+        </span>
+
+        </div>
+
+        <div class="delivery-tracking" id="deliveryTracking">
+
+        <div class="tracking-header">
+        <span>🛵</span>
+        <div>
+            <strong>Delivery Partner</strong>
+            <small id="deliveryPartnerName">
+                Finding your delivery partner...
+            </small>
+        </div>
+    </div>
+
+    <div class="tracking-info">
+
+        <div>
+            <small>Status</small>
+            <strong id="deliveryPartnerStatus">
+                Checking...
+            </strong>
+        </div>
+
+        <div>
+            <small>Distance</small>
+            <strong id="deliveryPartnerDistance">
+                Calculating...
+            </strong>
+        </div>
+
+    </div>
+
+        <div class="tracking-route-info">
+    <div>
+        <small>Road Distance</small>
+        <strong id="routeDistance">Calculating...</strong>
+    </div>
+
+    <div>
+        <small>Estimated Time</small>
+        <strong id="routeTime">Calculating...</strong>
+    </div>
+    </div>
+
+</div>
+
+        <button class="confirm-location-btn" id="confirmLocation">
+            Confirm Location
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- ================= HERO ================= -->
+
+<main>
+
+<section class="hero" id="home">
+
+    <div class="hero-container">
+
+        <div class="hero-content">
+
+            <div class="hero-badge">
+                <span>✦</span>
+                #1 Food Delivery Experience
+            </div>
+
+            <h1>
+                Good food.
+                <br>
+                <span>Good mood.</span>
+            </h1>
+
+            <p class="hero-text">
+                Discover delicious meals from your favourite restaurants
+                and enjoy every bite delivered straight to your doorstep.
+            </p>
+
+            <div class="location-search">
+
+                <div class="location-icon">⌖</div>
+
+                <div class="location-info">
+                    <small>Delivering to</small>
+                    <strong>Meerut, Uttar Pradesh</strong>
+                </div>
+
+                <button class="change-location">
+                    Change
+                </button>
+
+            </div>
+
+            <div class="hero-actions">
+
+                <button class="primary-btn">
+                    Explore Food
+                    <span>→</span>
+                </button>
+
+                <button class="outline-btn">
+                    View Restaurants
+                </button>
+
+            </div>
+
+            <div class="hero-stats">
+
+                <div class="stat">
+                    <strong>500+</strong>
+                    <span>Food Items</span>
+                </div>
+
+                <div class="stat-line"></div>
+
+                <div class="stat">
+                    <strong>50+</strong>
+                    <span>Restaurants</span>
+                </div>
+
+                <div class="stat-line"></div>
+
+                <div class="stat">
+                    <strong>4.8★</strong>
+                    <span>Customer Rating</span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- HERO VISUAL -->
+
+        <div class="hero-visual">
+
+            <div class="glow-circle"></div>
+
+            <div class="food-plate">
+
+                <div class="plate-shadow"></div>
+
+                <div class="food-main">
+                    🍔
+                </div>
+
+            </div>
+
+
+            <div class="floating-card rating-card">
+
+                <div class="mini-icon">★</div>
+
+                <div>
+                    <strong>4.8</strong>
+                    <span>Excellent rating</span>
+                </div>
+
+            </div>
+
+
+            <div class="floating-card delivery-card">
+
+                <div class="delivery-icon">
+                    🚴
+                </div>
+
+                <div>
+                    <strong>25 min</strong>
+                    <span>Fast delivery</span>
+                </div>
+
+            </div>
+
+
+            <div class="floating-card order-card">
+
+                <div class="order-check">✓</div>
+
+                <div>
+                    <strong>Order confirmed</strong>
+                    <span>Your food is on the way!</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= TRUST BAR ================= -->
+
+<section class="trust-section">
+
+    <div class="trust-container">
+
+        <div class="trust-item">
+            <span>⚡</span>
+            <div>
+                <strong>Lightning Fast</strong>
+                <small>Quick doorstep delivery</small>
+            </div>
+        </div>
+
+        <div class="trust-item">
+            <span>♨</span>
+            <div>
+                <strong>Fresh & Hot</strong>
+                <small>Prepared with care</small>
+            </div>
+        </div>
+
+        <div class="trust-item">
+            <span>✓</span>
+            <div>
+                <strong>Secure Payment</strong>
+                <small>100% safe checkout</small>
+            </div>
+        </div>
+
+        <div class="trust-item">
+            <span>♡</span>
+            <div>
+                <strong>Loved by Foodies</strong>
+                <small>Thousands of happy users</small>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= SECTION TITLE ================= -->
+
+<section class="restaurants-section" id="restaurants">
+
+    <div class="section-container">
+
+        <div class="section-heading">
+
+            <div>
+                <span class="section-label">DISCOVER</span>
+
+                <h2>
+                    Explore popular
+                    <span>restaurants</span>
+                </h2>
+
+                <p>
+                    Handpicked places serving food you'll love.
+                </p>
+            </div>
+
+            <button class="view-all">
+                View all restaurants →
+            </button>
+
+        </div>
+
+
+        <!-- RESTAURANT CARDS -->
+
+        <div class="restaurant-grid">
+
+            <article class="restaurant-card">
+
+                <div class="restaurant-image image-one">
+
+                    <span class="offer-badge">
+                        20% OFF
+                    </span>
+
+                    <span class="heart">
+                        ♡
+                    </span>
+
+                    <div class="food-emoji">
+                        🍕
+                    </div>
+
+                </div>
+
+                <div class="restaurant-info">
+
+                    <div class="restaurant-title">
+                        <h3>Italian Kitchen</h3>
+                        <span class="rating">★ 4.8</span>
+                    </div>
+
+                    <p>Pizza • Pasta • Italian</p>
+
+                    <div class="restaurant-meta">
+                        <span>⚡ 25-30 min</span>
+                        <span>₹₹</span>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="restaurant-card">
+
+                <div class="restaurant-image image-two">
+
+                    <span class="offer-badge">
+                        POPULAR
+                    </span>
+
+                    <span class="heart">
+                        ♡
+                    </span>
+
+                    <div class="food-emoji">
+                        🍜
+                    </div>
+
+                </div>
+
+                <div class="restaurant-info">
+
+                    <div class="restaurant-title">
+                        <h3>Asian Bowl</h3>
+                        <span class="rating">★ 4.7</span>
+                    </div>
+
+                    <p>Noodles • Chinese • Asian</p>
+
+                    <div class="restaurant-meta">
+                        <span>⚡ 20-25 min</span>
+                        <span>₹₹</span>
+                    </div>
+
+                </div>
+
+            </article>
+
+
+            <article class="restaurant-card">
+
+                <div class="restaurant-image image-three">
+
+                    <span class="offer-badge">
+                        BESTSELLER
+                    </span>
+
+                    <span class="heart">
+                        ♡
+                    </span>
+
+                    <div class="food-emoji">
+                        🍗
+                    </div>
+
+                </div>
+
+                <div class="restaurant-info">
+
+                    <div class="restaurant-title">
+                        <h3>Spice Junction</h3>
+                        <span class="rating">★ 4.9</span>
+                    </div>
+
+                    <p>Indian • Biryani • North Indian</p>
+
+                    <div class="restaurant-meta">
+                        <span>⚡ 30-35 min</span>
+                        <span>₹₹₹</span>
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= OFFERS ================= -->
+
+<section class="offers-section" id="offers">
+
+    <div class="offers-container">
+
+        <div class="offer-content">
+
+            <span class="section-label light">
+                EXCLUSIVE OFFERS
+            </span>
+
+            <h2>
+                Your cravings
+                <br>
+                <span>deserve a discount.</span>
+            </h2>
+
+            <p>
+                Grab amazing deals and make your favourite meals
+                even more delicious.
+            </p>
+
+            <button class="offer-btn">
+                Explore offers →
+            </button>
+
+        </div>
+
+
+        <div class="coupon-card">
+
+            <div class="coupon-top">
+                <span>FOODIES SPECIAL</span>
+                <span>✦</span>
+            </div>
+
+            <div class="coupon-discount">
+                <strong>50</strong>
+                <span>%<br>OFF</span>
+            </div>
+
+            <p>
+                On orders above ₹300
+            </p>
+
+            <div class="coupon-code">
+                <span>FOOD50</span>
+                <button>Copy</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= WHY FOODIES ================= -->
+
+<section class="why-section" id="about">
+
+    <div class="section-container">
+
+        <div class="why-heading">
+
+            <span class="section-label">
+                WHY FOODIES
+            </span>
+
+            <h2>
+                More than just
+                <span>food delivery.</span>
+            </h2>
+
+            <p>
+                Everything we do is designed around making your
+                food experience better.
+            </p>
+
+        </div>
+
+
+        <div class="feature-grid">
+
+            <div class="feature-card">
+
+                <div class="feature-number">
+                    01
+                </div>
+
+                <div class="feature-icon">
+                    ⚡
+                </div>
+
+                <h3>Fast Delivery</h3>
+
+                <p>
+                    Your favourite meals delivered quickly,
+                    fresh and ready to enjoy.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-number">
+                    02
+                </div>
+
+                <div class="feature-icon">
+                    ♨
+                </div>
+
+                <h3>Quality Food</h3>
+
+                <p>
+                    We connect you with trusted restaurants
+                    serving delicious food.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-number">
+                    03
+                </div>
+
+                <div class="feature-icon">
+                    🔒
+                </div>
+
+                <h3>Secure Payments</h3>
+
+                <p>
+                    Simple and secure payments for a
+                    completely stress-free experience.
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <div class="feature-number">
+                    04
+                </div>
+
+                <div class="feature-icon">
+                    ♡
+                </div>
+
+                <h3>Made for Foodies</h3>
+
+                <p>
+                    A smooth experience built for people
+                    who genuinely love great food.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ================= CTA ================= -->
+
+<section class="cta-section">
+
+    <div class="cta-container">
+
+        <div>
+
+            <span>READY TO EAT?</span>
+
+            <h2>
+                Your next favourite
+                <br>
+                meal is waiting.
+            </h2>
+
+        </div>
+
+        <button class="primary-btn white-btn">
+            Start Ordering
+            <span>→</span>
+        </button>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer class="footer">
+
+    <div class="footer-container">
+
+        <div class="footer-brand">
+
+            <a href="#" class="logo footer-logo">
+                <span class="logo-icon">✦</span>
+                <span>food<span>ies</span></span>
+            </a>
+
+            <p>
+                Good food. Good mood.
+                <br>
+                Delivered with love.
+            </p>
+
+        </div>
+
+
+        <div class="footer-links">
+
+            <div>
+                <h4>Explore</h4>
+                <a href="#home">Home</a>
+                <a href="#restaurants">Restaurants</a>
+                <a href="#offers">Offers</a>
+            </div>
+
+            <div>
+                <h4>Company</h4>
+                <a href="#about">About us</a>
+                <a href="#">Contact</a>
+                <a href="#">Careers</a>
+            </div>
+
+            <div>
+                <h4>Support</h4>
+                <a href="#">Help Center</a>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <span>
+            © 2026 Foodies. All rights reserved.
+        </span>
+
+        <span>
+            Made with ♥ for food lovers.
+        </span>
+
+    </div>
+
+</footer>
+
+
+<script src="js/script.js"></script>
+    <!-- Leaflet Map JS -->
+<script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js">
+    
+</script>
+
+<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.js"></script>
+
+</body>
+</html>

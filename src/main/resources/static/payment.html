@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Foodies - Payment</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f6fa;
+            min-height: 100vh;
+        }
+
+        header {
+            background: #ff5722;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h2 {
+            font-size: 24px;
+        }
+
+        .back-btn {
+            background: white;
+            color: #ff5722;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .payment-container {
+            max-width: 500px;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .amount-box {
+            background: #fff3ed;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .amount-box h2 {
+            color: #ff5722;
+            margin-top: 10px;
+        }
+
+        label {
+            display: block;
+            margin: 15px 0 8px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .pay-btn {
+            width: 100%;
+            margin-top: 25px;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            background: #ff5722;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .pay-btn:hover {
+            background: #e64a19;
+        }
+    </style>
+    <script src="js/notifications.js"></script>
+
+</head>
+
+<body>
+
+<header>
+    <h2>🍔 Foodies</h2>
+
+    <button class="back-btn"
+            onclick="window.location.href='customer-dashboard.html'">
+        Dashboard
+    </button>
+</header>
+
+<div class="payment-container">
+
+    <h1>Complete Payment</h1>
+
+    <div class="amount-box">
+        <p>Order ID: <strong id="orderId">-</strong></p>
+        <h2>₹<span id="amount">0</span></h2>
+    </div>
+
+    <label for="paymentMethod">
+        Select Payment Method
+    </label>
+
+    <select id="paymentMethod">
+        <option value="COD">Cash on Delivery</option>
+        <option value="ONLINE">Online Payment (Demo)</option>
+    </select>
+
+    <button class="pay-btn"
+            onclick="makePayment()">
+        Confirm Payment
+    </button>
+
+</div>
+
+<script>
+
+    const params = new URLSearchParams(window.location.search);
+
+    const orderId = params.get("orderId");
+    const amount = params.get("amount");
+
+    document.getElementById("orderId").textContent =
+        orderId || "-";
+
+    document.getElementById("amount").textContent =
+        amount || "0";
+
+    async function makePayment() {
+
+        const token =
+            localStorage.getItem("foodiesToken");
+
+        if (!token) {
+            alert("Please login first.");
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (!orderId || !amount) {
+            alert("Order details missing.");
+            return;
+        }
+
+        const paymentMethod =
+            document.getElementById("paymentMethod").value;
+
+        const paymentData = {
+            orderId: Number(orderId),
+            amount: Number(amount),
+            paymentMethod: paymentMethod
+        };
+
+        try {
+
+            const response = await fetch(
+                "/api/payments",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": "Bearer " + token
+                    },
+
+                    body: JSON.stringify(paymentData)
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Payment failed");
+            }
+
+            const result = await response.json();
+
+            alert(
+            "Payment successful! 🎉\nPayment ID: " +
+            result.id
+        );
+
+        // Clear cart after successful payment
+        localStorage.removeItem("foodiesCart");
+
+        // Redirect to Orders
+        window.location.href = "orders.html";
+
+        } catch (error) {
+
+            console.error("Payment Error:", error);
+
+            alert("Payment failed. Please try again.");
+
+        }
+    }
+
+</script>
+
+</body>
+</html>

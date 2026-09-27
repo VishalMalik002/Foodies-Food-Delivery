@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Cart | Foodies</title>
+
+    <link rel="stylesheet"
+          href="css/style.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        .cart-page {
+            min-height: 100vh;
+            background: #f7f7f7;
+        }
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .cart-header {
+            background: white;
+            padding: 18px 6%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-logo {
+            color: #ff6b00;
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .back-btn {
+            border: none;
+            background: #fff1e8;
+            color: #ff6b00;
+
+            padding: 10px 18px;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* =========================
+           CART CONTAINER
+        ========================= */
+
+        .cart-container {
+            width: 88%;
+            max-width: 1000px;
+
+            margin: auto;
+
+            padding: 40px 0;
+        }
+
+        .cart-container h1 {
+            margin: 0 0 25px;
+
+            font-size: 30px;
+        }
+
+        /* =========================
+           CART ITEM
+        ========================= */
+
+        .cart-item {
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 16px;
+
+            margin-bottom: 15px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 25px;
+
+            width: 100%;
+
+            box-shadow:
+                0 5px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        .cart-item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .cart-item h3 {
+            margin: 0 0 7px;
+
+            font-size: 20px;
+        }
+
+        .cart-item p {
+            margin: 0;
+
+            color: #777;
+
+            font-size: 15px;
+        }
+
+        /* =========================
+           QUANTITY
+        ========================= */
+
+        .quantity-box {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            flex-shrink: 0;
+        }
+
+        .quantity-btn {
+            border: none;
+
+            background: #ff6b00;
+
+            color: white;
+
+            width: 34px;
+            height: 34px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-size: 18px;
+
+            font-weight: 600;
+
+            display: flex;
+
+            align-items: center;
+            justify-content: center;
+
+            flex-shrink: 0;
+        }
+
+        .quantity-number {
+            min-width: 28px;
+
+            text-align: center;
+
+            font-weight: 700;
+        }
+
+        /* =========================
+           REMOVE
+        ========================= */
+
+        .remove-btn {
+            border: none;
+
+            background: #ffe5e5;
+
+            color: #d60000;
+
+            padding: 9px 13px;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: 600;
+
+            white-space: nowrap;
+
+            margin-left: 8px;
+        }
+
+        /* =========================
+           COUPON
+        ========================= */
+
+        .coupon-section {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 16px;
+
+            margin-top: 25px;
+
+            box-shadow:
+                0 5px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        .coupon-section h3 {
+            margin: 0 0 15px;
+
+            font-size: 20px;
+        }
+
+        .coupon-input-row {
+            display: flex;
+
+            gap: 10px;
+        }
+
+        .coupon-input {
+            flex: 1;
+
+            padding: 12px 14px;
+
+            border: 1px solid #ddd;
+
+            border-radius: 9px;
+
+            outline: none;
+
+            font-size: 15px;
+        }
+
+        .coupon-input:focus {
+            border-color: #ff6b00;
+        }
+
+        .coupon-btn {
+            border: none;
+
+            background: #ff6b00;
+
+            color: white;
+
+            padding: 12px 20px;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            font-weight: 700;
+        }
+
+        .coupon-message {
+            margin: 12px 0 0;
+
+            font-size: 14px;
+
+            font-weight: 600;
+        }
+
+        .coupon-success {
+            color: #16803c;
+        }
+
+        .coupon-error {
+            color: #d60000;
+        }
+
+        /* =========================
+           TOTAL
+        ========================= */
+
+        .cart-total {
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 16px;
+
+            margin-top: 25px;
+
+            box-shadow:
+                0 5px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        .price-row {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 12px;
+
+            font-size: 16px;
+        }
+
+        .discount-row {
+            color: #16803c;
+
+            font-weight: 600;
+        }
+
+        .final-total-row {
+            border-top: 1px solid #eee;
+
+            padding-top: 18px;
+
+            margin-top: 15px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+        .final-total-row h2 {
+            margin: 0;
+
+            font-size: 24px;
+        }
+
+        .checkout-btn {
+            border: none;
+
+            background: #ff6b00;
+
+            color: white;
+
+            padding: 13px 25px;
+
+            border-radius: 9px;
+
+            cursor: pointer;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+        /* =========================
+           EMPTY CART
+        ========================= */
+
+        .empty-cart {
+            background: white;
+
+            padding: 60px 30px;
+
+            text-align: center;
+
+            border-radius: 16px;
+
+            color: #777;
+
+            box-shadow:
+                0 5px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-cart h2 {
+            margin-bottom: 10px;
+
+            color: #333;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            .cart-header {
+                padding: 16px 4%;
+            }
+
+            .cart-logo {
+                font-size: 22px;
+            }
+
+            .cart-container {
+                width: 92%;
+
+                padding: 30px 0;
+            }
+
+            .cart-container h1 {
+                font-size: 26px;
+            }
+
+            .cart-item {
+                flex-direction: column;
+
+                align-items: stretch;
+
+                gap: 18px;
+            }
+
+            .quantity-box {
+                justify-content: flex-start;
+
+                flex-wrap: wrap;
+            }
+
+            .coupon-input-row {
+                flex-direction: column;
+            }
+
+            .coupon-btn {
+                width: 100%;
+            }
+
+            .final-total-row {
+                flex-direction: column;
+
+                align-items: stretch;
+
+                gap: 15px;
+
+                text-align: center;
+            }
+
+            .checkout-btn {
+                width: 100%;
+            }
+        }
+
+        /* =========================
+           SMALL MOBILE
+        ========================= */
+
+        @media (max-width: 400px) {
+
+            .quantity-box {
+                gap: 6px;
+            }
+
+            .remove-btn {
+                margin-left: 4px;
+            }
+
+            .cart-total {
+                padding: 20px;
+            }
+
+            .final-total-row h2 {
+                font-size: 21px;
+            }
+        }
+
+    </style>
+
+    <script src="js/notifications.js"></script>
+
+</head>
+
+
+<body>
+
+<div class="cart-page">
+
+    <!-- =========================
+         HEADER
+    ========================= -->
+
+    <header class="cart-header">
+
+        <div class="cart-logo">
+            🛒 Foodies
+        </div>
+
+        <button
+            class="back-btn"
+            onclick="goBack()">
+
+            ← Menu
+
+        </button>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN CART
+    ========================= -->
+
+    <main class="cart-container">
+
+        <h1>My Cart</h1>
+
+        <div id="cartItems"></div>
+
+        <div id="couponContainer"></div>
+
+        <div id="cartTotal"></div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    /* =========================
+       LOGIN CHECK
+    ========================= */
+
+    const token =
+        localStorage.getItem("foodiesToken");
+
+    if (!token) {
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    /* =========================
+       LOAD CART
+    ========================= */
+
+    function loadCart() {
+
+        const cart =
+            JSON.parse(
+                localStorage.getItem("foodiesCart")
+            ) || [];
+
+
+        const cartItems =
+            document.getElementById("cartItems");
+
+        const couponContainer =
+            document.getElementById(
+                "couponContainer"
+            );
+
+        const cartTotal =
+            document.getElementById(
+                "cartTotal"
+            );
+
+
+        /* =========================
+           EMPTY CART
+        ========================= */
+
+        if (cart.length === 0) {
+
+            cartItems.innerHTML = `
+
+                <div class="empty-cart">
+
+                    <h2>
+                        🛒 Your cart is empty
+                    </h2>
+
+                    <p>
+                        Add some delicious food
+                        from the menu.
+                    </p>
+
+                </div>
+
+            `;
+
+            couponContainer.innerHTML = "";
+
+            cartTotal.innerHTML = "";
+
+            localStorage.removeItem(
+                "discountedTotal"
+            );
+
+            localStorage.removeItem(
+                "appliedCoupon"
+            );
+
+            return;
+        }
+
+
+        /* =========================
+           CLEAR OLD ITEMS
+        ========================= */
+
+        cartItems.innerHTML = "";
+
+
+        let total = 0;
+
+
+        /* =========================
+           DISPLAY CART ITEMS
+        ========================= */
+
+        cart.forEach(function(item) {
+
+            const itemTotal =
+                item.price * item.quantity;
+
+
+            total += itemTotal;
+
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className =
+                "cart-item";
+
+
+            div.innerHTML = `
+
+                <div class="cart-item-info">
+
+                    <h3>
+                        ${item.name}
+                    </h3>
+
+                    <p>
+                        ₹${item.price}
+                        ×
+                        ${item.quantity}
+                    </p>
+
+                </div>
+
+
+                <div class="quantity-box">
+
+                    <button
+                        class="quantity-btn"
+                        onclick="changeQuantity(
+                            ${item.id},
+                            -1
+                        )">
+
+                        −
+
+                    </button>
+
+
+                    <span class="quantity-number">
+
+                        ${item.quantity}
+
+                    </span>
+
+
+                    <button
+                        class="quantity-btn"
+                        onclick="changeQuantity(
+                            ${item.id},
+                            1
+                        )">
+
+                        +
+
+                    </button>
+
+
+                    <button
+                        class="remove-btn"
+                        onclick="removeItem(
+                            ${item.id}
+                        )">
+
+                        Remove
+
+                    </button>
+
+                </div>
+
+            `;
+
+
+            cartItems.appendChild(div);
+
+        });
+
+
+        /* =========================
+           COUPON SECTION
+        ========================= */
+
+        couponContainer.innerHTML = `
+
+            <div class="coupon-section">
+
+                <h3>
+                    🎟️ Apply Coupon
+                </h3>
+
+                <div class="coupon-input-row">
+
+                    <input
+                        type="text"
+                        id="couponCode"
+                        class="coupon-input"
+                        placeholder="Enter coupon code"
+                    >
+
+                    <button
+                        type="button"
+                        class="coupon-btn"
+                        onclick="applyCoupon()">
+
+                        Apply
+
+                    </button>
+
+                </div>
+
+                <p
+                    id="couponMessage"
+                    class="coupon-message">
+                </p>
+
+            </div>
+
+        `;
+
+
+        /* =========================
+           TOTAL SECTION
+        ========================= */
+
+        cartTotal.innerHTML = `
+
+            <div class="cart-total">
+
+                <div>
+
+                    <div class="price-row">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <strong>
+                            ₹${total.toFixed(2)}
+                        </strong>
+
+                    </div>
+
+
+                    <div
+                        id="discountRow"
+                        class="price-row discount-row"
+                        style="display:none;">
+
+                        <span>
+                            Coupon Discount
+                        </span>
+
+                        <strong
+                            id="discountAmount">
+                            ₹0.00
+                        </strong>
+
+                    </div>
+
+
+                    <div class="final-total-row">
+
+                        <h2>
+                            Total:
+                            ₹<span id="finalTotal">
+                                ${total.toFixed(2)}
+                            </span>
+                        </h2>
+
+                        <button
+                            class="checkout-btn"
+                            onclick="checkout()">
+
+                            Proceed to Checkout
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        /* =========================
+           RESET PREVIOUS COUPON
+           WHEN CART RELOADS
+        ========================= */
+
+        localStorage.removeItem(
+            "discountedTotal"
+        );
+
+        localStorage.removeItem(
+            "appliedCoupon"
+        );
+
+    }
+
+
+    /* =========================
+       CHANGE QUANTITY
+    ========================= */
+
+    function changeQuantity(
+        itemId,
+        change
+    ) {
+
+        let cart =
+            JSON.parse(
+                localStorage.getItem(
+                    "foodiesCart"
+                )
+            ) || [];
+
+
+        const item =
+            cart.find(
+                item =>
+                    item.id === itemId
+            );
+
+
+        if (!item) {
+
+            return;
+
+        }
+
+
+        item.quantity += change;
+
+
+        /* =========================
+           REMOVE IF ZERO
+        ========================= */
+
+        if (item.quantity <= 0) {
+
+            cart =
+                cart.filter(
+                    item =>
+                        item.id !== itemId
+                );
+
+        }
+
+
+        localStorage.setItem(
+            "foodiesCart",
+            JSON.stringify(cart)
+        );
+
+
+        /* Coupon becomes invalid after
+           cart amount changes */
+
+        localStorage.removeItem(
+            "discountedTotal"
+        );
+
+        localStorage.removeItem(
+            "appliedCoupon"
+        );
+
+
+        loadCart();
+
+    }
+
+
+    /* =========================
+       REMOVE ITEM
+    ========================= */
+
+    function removeItem(itemId) {
+
+        let cart =
+            JSON.parse(
+                localStorage.getItem(
+                    "foodiesCart"
+                )
+            ) || [];
+
+
+        cart =
+            cart.filter(
+                item =>
+                    item.id !== itemId
+            );
+
+
+        localStorage.setItem(
+            "foodiesCart",
+            JSON.stringify(cart)
+        );
+
+
+        localStorage.removeItem(
+            "discountedTotal"
+        );
+
+        localStorage.removeItem(
+            "appliedCoupon"
+        );
+
+
+        loadCart();
+
+    }
+
+
+    /* =========================
+       APPLY COUPON
+    ========================= */
+
+    async function applyCoupon() {
+
+        const couponInput =
+            document.getElementById(
+                "couponCode"
+            );
+
+
+        const couponMessage =
+            document.getElementById(
+                "couponMessage"
+            );
+
+
+        if (!couponInput) {
+
+            return;
+
+        }
+
+
+        const couponCode =
+            couponInput.value
+                .trim()
+                .toUpperCase();
+
+
+        /* =========================
+           VALIDATE CODE
+        ========================= */
+
+        if (!couponCode) {
+
+            couponMessage.textContent =
+                "Please enter a coupon code.";
+
+            couponMessage.className =
+                "coupon-message coupon-error";
+
+            return;
+
+        }
+
+
+        /* =========================
+           GET CURRENT CART
+        ========================= */
+
+        const cart =
+            JSON.parse(
+                localStorage.getItem(
+                    "foodiesCart"
+                )
+            ) || [];
+
+
+        if (cart.length === 0) {
+
+            couponMessage.textContent =
+                "Your cart is empty.";
+
+            couponMessage.className =
+                "coupon-message coupon-error";
+
+            return;
+
+        }
+
+
+        /* =========================
+           CALCULATE CART TOTAL
+        ========================= */
+
+        const orderTotal =
+            cart.reduce(
+                function(total, item) {
+
+                    return total +
+                        (
+                            item.price *
+                            item.quantity
+                        );
+
+                },
+                0
+            );
+
+
+        /* =========================
+           TOKEN
+        ========================= */
+
+        const currentToken =
+            localStorage.getItem(
+                "foodiesToken"
+            );
+
+
+        if (!currentToken) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+
+                    "/api/coupons/apply"
+                    + "?code="
+                    + encodeURIComponent(
+                        couponCode
+                    )
+                    + "&orderTotal="
+                    + orderTotal,
+
+                    {
+                        method: "POST",
+
+                        headers: {
+
+                            "Authorization":
+                                "Bearer "
+                                + currentToken
+
+                        }
+
+                    }
+
+                );
+
+
+            const result =
+                await response.text();
+
+
+            /* =========================
+               ERROR
+            ========================= */
+
+            if (!response.ok) {
+
+                couponMessage.textContent =
+                    result;
+
+                couponMessage.className =
+                    "coupon-message coupon-error";
+
+                return;
+
+            }
+
+
+            /* =========================
+               SUCCESS
+            ========================= */
+
+            const data =
+                JSON.parse(result);
+
+
+            couponMessage.textContent =
+                "Coupon applied! You saved ₹"
+                + Number(
+                    data.discount
+                ).toFixed(2);
+
+
+            couponMessage.className =
+                "coupon-message coupon-success";
+
+
+            /* =========================
+               STORE COUPON
+            ========================= */
+
+            localStorage.setItem(
+                "discountedTotal",
+                data.finalAmount
+            );
+
+
+            localStorage.setItem(
+                "appliedCoupon",
+                data.code
+            );
+
+
+            /* =========================
+               UPDATE TOTAL
+            ========================= */
+
+            const discountRow =
+                document.getElementById(
+                    "discountRow"
+                );
+
+
+            const discountAmount =
+                document.getElementById(
+                    "discountAmount"
+                );
+
+
+            const finalTotal =
+                document.getElementById(
+                    "finalTotal"
+                );
+
+
+            discountRow.style.display =
+                "flex";
+
+
+            discountAmount.textContent =
+                "₹"
+                + Number(
+                    data.discount
+                ).toFixed(2);
+
+
+            finalTotal.textContent =
+                Number(
+                    data.finalAmount
+                ).toFixed(2);
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Coupon error:",
+                error
+            );
+
+
+            couponMessage.textContent =
+                "Unable to apply coupon. Please try again.";
+
+            couponMessage.className =
+                "coupon-message coupon-error";
+
+        }
+
+    }
+
+
+    /* =========================
+       CHECKOUT
+    ========================= */
+
+    async function checkout() {
+
+        const cart =
+            JSON.parse(
+                localStorage.getItem(
+                    "foodiesCart"
+                )
+            ) || [];
+
+
+        if (cart.length === 0) {
+
+            alert(
+                "Your cart is empty."
+            );
+
+            return;
+
+        }
+
+
+        const currentToken =
+            localStorage.getItem(
+                "foodiesToken"
+            );
+
+
+        if (!currentToken) {
+
+            window.location.href =
+                "login.html";
+
+            return;
+
+        }
+
+
+        /* =========================
+           RESTAURANT
+        ========================= */
+
+        const restaurantId =
+            cart[0].restaurantId;
+
+
+        /* =========================
+           ORIGINAL TOTAL
+        ========================= */
+
+        const originalTotal =
+            cart.reduce(
+                function(total, item) {
+
+                    return total +
+                        (
+                            item.price *
+                            item.quantity
+                        );
+
+                },
+                0
+            );
+
+
+        /* =========================
+           FINAL TOTAL
+        ========================= */
+
+        const savedDiscountedTotal =
+            localStorage.getItem(
+                "discountedTotal"
+            );
+
+
+        const totalPrice =
+            savedDiscountedTotal
+                ? Number(
+                    savedDiscountedTotal
+                )
+                : originalTotal;
+
+
+        /* =========================
+           ORDER DATA
+        ========================= */
+
+        const orderData = {
+
+            restaurantId:
+                restaurantId,
+
+            totalPrice:
+                totalPrice,
+
+            status:
+                "PLACED",
+
+            paymentStatus:
+                "PENDING"
+
+        };
+
+
+        try {
+
+            const response =
+                await fetch(
+
+                    "/api/orders",
+
+                    {
+
+                        method: "POST",
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                "Bearer "
+                                + currentToken
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                orderData
+                            )
+
+                    }
+
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Order placement failed"
+                );
+
+            }
+
+
+            const order =
+                await response.json();
+
+
+            alert(
+
+                "Order created successfully! 🎉\n"
+                + "Order ID: "
+                + order.id
+
+            );
+
+
+            /* =========================
+               PAYMENT PAGE
+            ========================= */
+
+            window.location.href =
+                "payment.html?orderId="
+                + order.id
+                + "&amount="
+                + order.totalPrice;
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "Checkout error:",
+                error
+            );
+
+
+            alert(
+                "Unable to place order. Please try again."
+            );
+
+        }
+
+    }
+
+
+    /* =========================
+       BACK TO MENU
+    ========================= */
+
+    function goBack() {
+
+        window.location.href =
+            "menu.html";
+
+    }
+
+
+    /* =========================
+       INITIAL LOAD
+    ========================= */
+
+    loadCart();
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Customer Dashboard | Foodies</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .dashboard-page {
+            min-height: 100vh;
+            background: #f7f7f7;
+        }
+
+        .dashboard-header {
+            background: #ffffff;
+            border-bottom: 1px solid #eeeeee;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-logo {
+            font-size: 26px;
+            font-weight: 800;
+            color: #ff6b00;
+        }
+
+        .dashboard-user {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #ff6b00;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .logout-btn {
+            border: none;
+            background: #fff1e8;
+            color: #ff6b00;
+            padding: 10px 18px;
+            border-radius: 9px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .dashboard-container {
+            width: 88%;
+            max-width: 1250px;
+            margin: auto;
+            padding: 45px 0;
+        }
+
+        .welcome-section {
+            background: linear-gradient(135deg, #ff6b00, #ff8c42);
+            color: white;
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 30px;
+        }
+
+        .welcome-section h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+        }
+
+        .welcome-section p {
+            margin: 0;
+            opacity: 0.9;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .dashboard-card {
+            background: white;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            transition: 0.3s;
+        }
+
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-icon {
+            font-size: 32px;
+            margin-bottom: 15px;
+        }
+
+        .dashboard-card h3 {
+            margin: 0 0 8px;
+            font-size: 20px;
+        }
+
+        .dashboard-card p {
+            color: #777;
+            line-height: 1.5;
+        }
+
+        .card-btn {
+            margin-top: 15px;
+            border: none;
+            background: #ff6b00;
+            color: white;
+            padding: 11px 18px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* =========================
+           HELP & SUPPORT
+        ========================= */
+
+        .support-card {
+            position: relative;
+        }
+
+        .support-card > p {
+            margin-bottom: 18px;
+        }
+
+        .support-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .support-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 11px;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+
+        .support-item-icon {
+            font-size: 21px;
+        }
+
+        .support-item strong {
+            display: block;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .support-item small {
+            color: #777;
+            font-size: 12px;
+        }
+
+        .support-contact {
+            margin-top: 18px;
+            padding-top: 15px;
+            border-top: 1px solid #eeeeee;
+        }
+
+        .support-contact strong {
+            font-size: 14px;
+            color: #333;
+        }
+
+        .support-contact p {
+            margin: 5px 0;
+            font-size: 13px;
+            color: #666;
+        }
+
+        @media (max-width: 800px) {
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .dashboard-header {
+                padding: 15px 4%;
+            }
+
+            .dashboard-container {
+                width: 92%;
+            }
+
+            .welcome-section h1 {
+                font-size: 26px;
+            }
+        }
+    </style>
+    <script src="js/notifications.js"></script>
+
+</head>
+
+<body>
+
+<div class="dashboard-page">
+
+    <!-- HEADER -->
+    <header class="dashboard-header">
+
+        <div class="dashboard-logo">
+            🍔 Foodies
+        </div>
+
+        <div class="dashboard-user">
+
+            <div class="user-avatar">
+                V
+            </div>
+
+            <button class="logout-btn" id="logoutBtn">
+                Logout
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+    <main class="dashboard-container">
+
+        <!-- WELCOME -->
+        <section class="welcome-section">
+
+            <h1>Welcome back, Vishal! 👋</h1>
+
+            <p>
+                Discover restaurants, track your orders and enjoy delicious food.
+            </p>
+
+        </section>
+
+
+        <!-- DASHBOARD CARDS -->
+        <section class="dashboard-grid">
+
+
+            <!-- Restaurants -->
+            <div class="dashboard-card">
+
+                <div class="card-icon">🍽️</div>
+
+                <h3>Browse Restaurants</h3>
+
+                <p>
+                    Explore nearby restaurants and discover your favourite food.
+                </p>
+
+                <button
+                    class="card-btn"
+                    id="exploreRestaurantsBtn">
+                    Explore
+                </button>
+
+            </div>
+
+
+            <!-- Orders -->
+            <div class="dashboard-card">
+
+                <div class="card-icon">📦</div>
+
+                <h3>My Orders</h3>
+
+                <p>
+                    View your previous orders and check your current order status.
+                </p>
+
+                <button
+                    class="card-btn"
+                    onclick="window.location.href='orders.html'">
+                    View Orders
+                </button>
+
+            </div>
+
+
+            <!-- Track Order -->
+            <div class="dashboard-card">
+
+                <div class="card-icon">🛵</div>
+
+                <h3>Track Delivery</h3>
+
+                <p>
+                    Track your delivery partner and see your order's live location.
+                </p>
+
+                <button
+                    class="card-btn"
+                    onclick="window.location.href='track-order.html'">
+                    Track Order
+                </button>
+
+            </div>
+
+
+            <!-- Profile -->
+            <div class="dashboard-card">
+
+                <div class="card-icon">👤</div>
+
+                <h3>My Profile</h3>
+
+                <p>
+                    Manage your personal information, phone number and address.
+                </p>
+
+                <button
+                    class="card-btn"
+                    onclick="window.location.href='profile.html'">
+                    Profile
+                </button>
+
+            </div>
+
+
+            <!-- Offers -->
+            <div class="dashboard-card">
+
+                <div class="card-icon">🎁</div>
+
+                <h3>Offers & Coupons</h3>
+
+                <p>
+                    Find available offers and save money on your next order.
+                </p>
+
+                <button
+                    class="card-btn"
+                    onclick="window.location.href='coupons.html'">
+                    View Offers
+                </button>
+
+            </div>
+
+
+            <!-- Help & Support -->
+            <div class="dashboard-card support-card">
+
+                <div class="card-icon">💬</div>
+
+                <h3>Help & Support</h3>
+
+                <p>
+                    Need help with your order, payment, delivery or account?
+                    Foodies support is here to help.
+                </p>
+
+
+                <div class="support-options">
+
+                    <div class="support-item">
+
+                        <span class="support-item-icon">📦</span>
+
+                        <div>
+                            <strong>Order Support</strong>
+                            <small>Get help with your order</small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="support-item">
+
+                        <span class="support-item-icon">💳</span>
+
+                        <div>
+                            <strong>Payment Help</strong>
+                            <small>Payment or refund related issues</small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="support-item">
+
+                        <span class="support-item-icon">🚚</span>
+
+                        <div>
+                            <strong>Delivery Support</strong>
+                            <small>Track delivery or report an issue</small>
+                        </div>
+
+                    </div>
+
+
+                    <div class="support-item">
+
+                        <span class="support-item-icon">👤</span>
+
+                        <div>
+                            <strong>Account Help</strong>
+                            <small>Profile and account related help</small>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="support-contact">
+
+                    <strong>📞 Contact Foodies Support</strong>
+
+                    <p>
+                        📧 foodies.support@gmail.com
+                    </p>
+
+                    <p>
+                        📱 +91 98765 43210
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    // =========================
+    // AUTH CHECK
+    // =========================
+
+    const token = localStorage.getItem("foodiesToken");
+
+    if (!token) {
+        window.location.href = "login.html";
+    }
+
+
+    // =========================
+    // EXPLORE RESTAURANTS
+    // =========================
+
+    const exploreRestaurantsBtn =
+        document.getElementById("exploreRestaurantsBtn");
+
+    if (exploreRestaurantsBtn) {
+
+        exploreRestaurantsBtn.addEventListener(
+            "click",
+            function () {
+
+                window.location.href = "restaurants.html";
+
+            }
+        );
+
+    }
+
+
+    // =========================
+    // LOGOUT
+    // =========================
+
+    const logoutBtn =
+        document.getElementById("logoutBtn");
+
+    if (logoutBtn) {
+
+        logoutBtn.addEventListener(
+            "click",
+            function () {
+
+                localStorage.removeItem("foodiesToken");
+
+                window.location.href = "login.html";
+
+            }
+        );
+
+    }
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Orders | Foodies</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f7f7f7;
+        }
+
+        .orders-page {
+            min-height: 100vh;
+        }
+
+        /* Header */
+
+        .orders-header {
+            background: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .orders-logo {
+            color: #ff6b00;
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .back-btn {
+            border: none;
+            background: #fff1e8;
+            color: #ff6b00;
+            padding: 10px 18px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        /* Main */
+
+        .orders-container {
+            width: 88%;
+            max-width: 1000px;
+            margin: auto;
+            padding: 40px 0;
+        }
+
+        .orders-container h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .orders-subtitle {
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        /* Order Card */
+
+        .order-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        .order-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .order-id {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .order-status {
+            padding: 7px 13px;
+            border-radius: 20px;
+            background: #fff1e8;
+            color: #ff6b00;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .order-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding-top: 18px;
+            border-top: 1px solid #eee;
+        }
+
+        .detail-box {
+            background: #fafafa;
+            padding: 14px;
+            border-radius: 10px;
+        }
+
+        .detail-label {
+            display: block;
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        /* Empty */
+
+        .empty-orders {
+            background: white;
+            padding: 60px 30px;
+            text-align: center;
+            border-radius: 16px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        .empty-orders .icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .empty-orders h2 {
+            margin: 0 0 10px;
+            color: #333;
+        }
+
+        .empty-orders p {
+            color: #777;
+        }
+
+        /* Loading */
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #777;
+        }
+
+        /* Mobile */
+
+        @media (max-width: 700px) {
+
+            .orders-header {
+                padding: 16px 4%;
+            }
+
+            .orders-logo {
+                font-size: 22px;
+            }
+
+            .orders-container {
+                width: 92%;
+                padding: 30px 0;
+            }
+
+            .orders-container h1 {
+                font-size: 26px;
+            }
+
+            .order-top {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .order-details {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+    <script src="js/notifications.js"></script>
+
+</head>
+
+<body>
+
+<div class="orders-page">
+
+    <!-- Header -->
+
+    <header class="orders-header">
+
+        <div class="orders-logo">
+            📦 Foodies
+        </div>
+
+        <button
+            class="back-btn"
+            onclick="goBack()">
+
+            ← Dashboard
+
+        </button>
+
+    </header>
+
+
+    <!-- Main -->
+
+    <main class="orders-container">
+
+        <h1>
+            My Orders
+        </h1>
+
+        <p class="orders-subtitle">
+            View your previous orders and check their current status.
+        </p>
+
+        <div id="ordersContainer">
+
+            <div class="loading">
+                Loading your orders...
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    const token =
+        localStorage.getItem("foodiesToken");
+
+
+    if (!token) {
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    async function loadOrders() {
+
+    try {
+
+        const payload =
+            JSON.parse(
+                atob(
+                    token
+                        .split(".")[1]
+                        .replace(/-/g, "+")
+                        .replace(/_/g, "/")
+                )
+            );
+
+        const email = payload.sub;
+
+
+        // Get current user
+        const userResponse =
+            await fetch(
+                `/api/users/by-email?email=${encodeURIComponent(email)}`,
+                {
+                    headers: {
+                        "Authorization":
+                            "Bearer " + token
+                    }
+                }
+            );
+
+
+        if (!userResponse.ok) {
+            throw new Error("Unable to find user");
+        }
+
+
+        const user =
+            await userResponse.json();
+
+
+        // Get user's orders
+        const ordersResponse =
+            await fetch(
+                `/api/orders/user/${user.id}`,
+                {
+                    headers: {
+                        "Authorization":
+                            "Bearer " + token
+                    }
+                }
+            );
+
+
+        if (!ordersResponse.ok) {
+            throw new Error("Unable to load orders");
+        }
+
+
+        const orders =
+            await ordersResponse.json();
+
+
+        const container =
+            document.getElementById(
+                "ordersContainer"
+            );
+
+
+        // No orders
+        if (orders.length === 0) {
+
+            container.innerHTML = `
+
+                <div class="empty-orders">
+
+                    <div class="icon">
+                        🛒
+                    </div>
+
+                    <h2>
+                        No Orders Yet
+                    </h2>
+
+                    <p>
+                        Your previous orders will appear here.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+        }
+
+
+        container.innerHTML = "";
+
+
+        // Display orders
+        orders.forEach(function(order) {
+
+            const orderCard =
+                document.createElement("div");
+
+            orderCard.className =
+                "order-card";
+
+
+            orderCard.innerHTML = `
+
+                <div class="order-top">
+
+                    <div class="order-id">
+                        Order #${order.id}
+                    </div>
+
+                    <div class="order-status">
+                        ${order.status || "PLACED"}
+                    </div>
+
+                </div>
+
+
+                <div class="order-details">
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Restaurant ID
+                        </span>
+
+                        <span class="detail-value">
+                            ${order.restaurantId || "N/A"}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Total Amount
+                        </span>
+
+                        <span class="detail-value">
+                            ₹${order.totalPrice || 0}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Payment Status
+                        </span>
+
+                        <span class="detail-value">
+                            ${order.paymentStatus || "PENDING"}
+                        </span>
+
+                    </div>
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Payment Method
+                        </span>
+
+                        <span class="detail-value">
+                            ${order.paymentMethod || "Not available"}
+                        </span>
+
+                    </div>
+
+
+                    <div class="detail-box">
+
+                        <span class="detail-label">
+                            Delivery Address
+                        </span>
+
+                        <span class="detail-value">
+                            ${order.deliveryAddress || "Not available"}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(orderCard);
+
+        });
+
+
+    } catch (error) {
+
+        console.error(
+            "Orders loading error:",
+            error
+        );
+
+
+        document.getElementById(
+            "ordersContainer"
+        ).innerHTML = `
+
+            <div class="empty-orders">
+
+                <div class="icon">
+                    ⚠️
+                </div>
+
+                <h2>
+                    Unable to load orders
+                </h2>
+
+                <p>
+                    Please try again.
+                </p>
+
+            </div>
+
+        `;
+
+    }
+
+}
+
+
+    function goBack() {
+
+        window.location.href =
+            "customer-dashboard.html";
+
+    }
+
+
+    loadOrders();
+
+</script>
+
+</body>
+
+</html>

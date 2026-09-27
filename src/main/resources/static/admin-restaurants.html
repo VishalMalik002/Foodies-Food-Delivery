@@ -1,0 +1,1169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Foodies - Restaurant Management</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        .header {
+            background: #ff4d2d;
+            color: white;
+            padding: 20px 40px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            background: white;
+            color: #ff4d2d;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 35px;
+        }
+
+        .page-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-top h1 {
+            font-size: 32px;
+        }
+
+        .add-btn {
+            background: #ff4d2d;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .restaurant-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 22px;
+        }
+
+        .restaurant-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .restaurant-card h2 {
+            margin-bottom: 8px;
+        }
+
+        .address {
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .info-box {
+            background: #f8f9fc;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .label {
+            display: block;
+            color: #777;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .value {
+            font-weight: bold;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            background: #e9f9ef;
+            color: #16803a;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .edit-btn {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .delete-btn {
+            background: #ffe5e5;
+            color: #c62828;
+        }
+
+        .empty-box {
+            background: white;
+            padding: 50px;
+            text-align: center;
+            border-radius: 15px;
+        }
+
+        /* MODAL */
+
+        .modal {
+            display: none;
+
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100%;
+
+            background: rgba(0,0,0,0.5);
+
+            justify-content: center;
+            align-items: center;
+
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 600px;
+
+            max-height: 90vh;
+            overflow-y: auto;
+
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 22px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px;
+
+            border: 1px solid #ddd;
+            border-radius: 8px;
+
+            outline: none;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .save-btn {
+            flex: 1;
+
+            background: #ff4d2d;
+            color: white;
+
+            border: none;
+            padding: 12px;
+
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .cancel-btn {
+            flex: 1;
+
+            background: #eee;
+            color: #333;
+
+            border: none;
+            padding: 12px;
+
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        @media (max-width: 800px) {
+
+            .restaurant-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .header {
+                padding: 18px 20px;
+            }
+
+            .container {
+                padding: 25px 18px;
+            }
+
+            .page-top {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+    <script src="js/notifications.js"></script>
+
+</head>
+
+
+<body>
+
+
+<header class="header">
+
+    <div class="logo">
+        🍔 Foodies Admin
+    </div>
+
+    <button
+        class="back-btn"
+        onclick="goBack()">
+        ← Dashboard
+    </button>
+
+</header>
+
+
+<main class="container">
+
+
+    <div class="page-top">
+
+        <div>
+
+            <h1>
+                Restaurant Management
+            </h1>
+
+            <p style="color:#666; margin-top:6px;">
+                Add, update and manage restaurants.
+            </p>
+
+        </div>
+
+
+        <button
+            class="add-btn"
+            onclick="openAddModal()">
+
+            + Add Restaurant
+
+        </button>
+
+    </div>
+
+
+    <div
+        id="restaurantContainer"
+        class="restaurant-grid">
+
+        <div class="empty-box">
+
+            <h2>
+                Loading Restaurants...
+            </h2>
+
+        </div>
+
+    </div>
+
+
+</main>
+
+
+<!-- MODAL -->
+
+<div
+    id="restaurantModal"
+    class="modal">
+
+
+    <div class="modal-content">
+
+        <h2 id="modalTitle">
+            Add Restaurant
+        </h2>
+
+
+        <input
+            type="hidden"
+            id="restaurantId">
+
+
+        <div class="form-group">
+
+            <label>
+                Restaurant Name
+            </label>
+
+            <input
+                type="text"
+                id="restaurantName"
+                placeholder="Enter restaurant name">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Address
+            </label>
+
+            <input
+                type="text"
+                id="restaurantAddress"
+                placeholder="Enter restaurant address">
+
+        </div>
+
+
+        <div class="form-row">
+
+
+            <div class="form-group">
+
+                <label>
+                    Rating
+                </label>
+
+                <input
+                    type="number"
+                    id="restaurantRating"
+                    step="0.1"
+                    min="0"
+                    max="5"
+                    placeholder="4.5">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Status
+                </label>
+
+                <select id="restaurantStatus">
+
+                    <option value="OPEN">
+                        OPEN
+                    </option>
+
+                    <option value="CLOSED">
+                        CLOSED
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+
+        <div class="form-row">
+
+
+            <div class="form-group">
+
+                <label>
+                    Opening Time
+                </label>
+
+                <input
+                    type="time"
+                    id="openingTime">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Closing Time
+                </label>
+
+                <input
+                    type="time"
+                    id="closingTime">
+
+            </div>
+
+        </div>
+
+
+        <div class="form-row">
+
+
+            <div class="form-group">
+
+                <label>
+                    Latitude
+                </label>
+
+                <input
+                    type="number"
+                    id="latitude"
+                    step="any"
+                    placeholder="28.9845">
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Longitude
+                </label>
+
+                <input
+                    type="number"
+                    id="longitude"
+                    step="any"
+                    placeholder="77.7064">
+
+            </div>
+
+        </div>
+
+
+        <div class="modal-actions">
+
+            <button
+                class="cancel-btn"
+                onclick="closeModal()">
+
+                Cancel
+
+            </button>
+
+
+            <button
+                class="save-btn"
+                onclick="saveRestaurant()">
+
+                Save Restaurant
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const token =
+        localStorage.getItem("foodiesToken");
+
+
+    if (!token) {
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    let restaurants = [];
+
+
+    async function loadRestaurants() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/restaurants",
+                    {
+                        headers: {
+                            "Authorization":
+                                "Bearer " + token
+                        }
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load restaurants"
+                );
+
+            }
+
+
+            restaurants =
+                await response.json();
+
+
+            renderRestaurants();
+
+
+        } catch (error) {
+
+            console.error(
+                "Restaurant loading error:",
+                error
+            );
+
+            document.getElementById(
+                "restaurantContainer"
+            ).innerHTML = `
+
+                <div class="empty-box">
+
+                    <h2>
+                        ⚠️ Unable to Load Restaurants
+                    </h2>
+
+                    <p>
+                        Please check the server.
+                    </p>
+
+                </div>
+
+            `;
+
+        }
+
+    }
+
+
+    function renderRestaurants() {
+
+        const container =
+            document.getElementById(
+                "restaurantContainer"
+            );
+
+
+        if (restaurants.length === 0) {
+
+            container.innerHTML = `
+
+                <div class="empty-box">
+
+                    <h2>
+                        No Restaurants Found
+                    </h2>
+
+                    <p>
+                        Add your first restaurant.
+                    </p>
+
+                </div>
+
+            `;
+
+            return;
+
+        }
+
+
+        container.innerHTML = "";
+
+
+        restaurants.forEach(function(restaurant) {
+
+            const card =
+                document.createElement("div");
+
+            card.className =
+                "restaurant-card";
+
+
+            card.innerHTML = `
+
+                <h2>
+                    ${restaurant.name || "Unnamed Restaurant"}
+                </h2>
+
+                <p class="address">
+                    📍 ${restaurant.address || "Address not available"}
+                </p>
+
+
+                <div class="info-row">
+
+                    <div class="info-box">
+
+                        <span class="label">
+                            Rating
+                        </span>
+
+                        <span class="value">
+                            ⭐ ${restaurant.rating || 0}
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span class="label">
+                            Status
+                        </span>
+
+                        <span class="status">
+                            ${restaurant.status || "CLOSED"}
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span class="label">
+                            Opening
+                        </span>
+
+                        <span class="value">
+                            ${restaurant.openingTime || "N/A"}
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span class="label">
+                            Closing
+                        </span>
+
+                        <span class="value">
+                            ${restaurant.closingTime || "N/A"}
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span class="label">
+                            Latitude
+                        </span>
+
+                        <span class="value">
+                            ${restaurant.latitude || "N/A"}
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <span class="label">
+                            Longitude
+                        </span>
+
+                        <span class="value">
+                            ${restaurant.longitude || "N/A"}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="card-actions">
+
+                    <button
+                        class="edit-btn"
+                        onclick="editRestaurant(${restaurant.id})">
+
+                        ✏️ Edit
+
+                    </button>
+
+
+                    <button
+                        class="delete-btn"
+                        onclick="deleteRestaurant(${restaurant.id})">
+
+                        🗑️ Delete
+
+                    </button>
+
+                </div>
+
+            `;
+
+
+            container.appendChild(card);
+
+        });
+
+    }
+
+
+    function openAddModal() {
+
+        document.getElementById(
+            "modalTitle"
+        ).textContent =
+            "Add Restaurant";
+
+
+        document.getElementById(
+            "restaurantId"
+        ).value = "";
+
+
+        document.getElementById(
+            "restaurantName"
+        ).value = "";
+
+
+        document.getElementById(
+            "restaurantAddress"
+        ).value = "";
+
+
+        document.getElementById(
+            "restaurantRating"
+        ).value = "";
+
+
+        document.getElementById(
+            "restaurantStatus"
+        ).value = "OPEN";
+
+
+        document.getElementById(
+            "openingTime"
+        ).value = "";
+
+
+        document.getElementById(
+            "closingTime"
+        ).value = "";
+
+
+        document.getElementById(
+            "latitude"
+        ).value = "";
+
+
+        document.getElementById(
+            "longitude"
+        ).value = "";
+
+
+        document.getElementById(
+            "restaurantModal"
+        ).style.display =
+            "flex";
+
+    }
+
+
+    function closeModal() {
+
+        document.getElementById(
+            "restaurantModal"
+        ).style.display =
+            "none";
+
+    }
+
+
+    function editRestaurant(id) {
+
+        const restaurant =
+            restaurants.find(
+                item => item.id === id
+            );
+
+
+        if (!restaurant) {
+            return;
+        }
+
+
+        document.getElementById(
+            "modalTitle"
+        ).textContent =
+            "Edit Restaurant";
+
+
+        document.getElementById(
+            "restaurantId"
+        ).value =
+            restaurant.id;
+
+
+        document.getElementById(
+            "restaurantName"
+        ).value =
+            restaurant.name || "";
+
+
+        document.getElementById(
+            "restaurantAddress"
+        ).value =
+            restaurant.address || "";
+
+
+        document.getElementById(
+            "restaurantRating"
+        ).value =
+            restaurant.rating || "";
+
+
+        document.getElementById(
+            "restaurantStatus"
+        ).value =
+            restaurant.status || "OPEN";
+
+
+        document.getElementById(
+            "openingTime"
+        ).value =
+            restaurant.openingTime || "";
+
+
+        document.getElementById(
+            "closingTime"
+        ).value =
+            restaurant.closingTime || "";
+
+
+        document.getElementById(
+            "latitude"
+        ).value =
+            restaurant.latitude || "";
+
+
+        document.getElementById(
+            "longitude"
+        ).value =
+            restaurant.longitude || "";
+
+
+        document.getElementById(
+            "restaurantModal"
+        ).style.display =
+            "flex";
+
+    }
+
+
+    async function saveRestaurant() {
+
+        const id =
+            document.getElementById(
+                "restaurantId"
+            ).value;
+
+
+        const restaurantData = {
+
+            name:
+                document.getElementById(
+                    "restaurantName"
+                ).value.trim(),
+
+            address:
+                document.getElementById(
+                    "restaurantAddress"
+                ).value.trim(),
+
+            rating:
+                Number(
+                    document.getElementById(
+                        "restaurantRating"
+                    ).value
+                ),
+
+            openingTime:
+                document.getElementById(
+                    "openingTime"
+                ).value,
+
+            closingTime:
+                document.getElementById(
+                    "closingTime"
+                ).value,
+
+            status:
+                document.getElementById(
+                    "restaurantStatus"
+                ).value,
+
+            latitude:
+                Number(
+                    document.getElementById(
+                        "latitude"
+                    ).value
+                ),
+
+            longitude:
+                Number(
+                    document.getElementById(
+                        "longitude"
+                    ).value
+                )
+
+        };
+
+
+        if (!restaurantData.name ||
+            !restaurantData.address) {
+
+            alert(
+                "Please enter restaurant name and address."
+            );
+
+            return;
+
+        }
+
+
+        const method =
+            id ? "PUT" : "POST";
+
+
+        const url =
+            id
+            ? `/api/restaurants/${id}`
+            : "/api/restaurants";
+
+
+        try {
+
+            const response =
+                await fetch(
+                    url,
+                    {
+                        method: method,
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                "Bearer " + token
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                restaurantData
+                            )
+
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Save failed"
+                );
+
+            }
+
+
+            alert(
+                id
+                ? "Restaurant updated successfully! ✅"
+                : "Restaurant added successfully! ✅"
+            );
+
+
+            closeModal();
+
+            loadRestaurants();
+
+
+        } catch (error) {
+
+            console.error(
+                "Restaurant save error:",
+                error
+            );
+
+            alert(
+                "Unable to save restaurant."
+            );
+
+        }
+
+    }
+
+
+    async function deleteRestaurant(id) {
+
+        const confirmed =
+            confirm(
+                "Are you sure you want to delete this restaurant?"
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    `/api/restaurants/${id}`,
+                    {
+                        method: "DELETE",
+
+                        headers: {
+                            "Authorization":
+                                "Bearer " + token
+                        }
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Delete failed"
+                );
+
+            }
+
+
+            alert(
+                "Restaurant deleted successfully! ✅"
+            );
+
+
+            loadRestaurants();
+
+
+        } catch (error) {
+
+            console.error(
+                "Restaurant delete error:",
+                error
+            );
+
+            alert(
+                "Unable to delete restaurant."
+            );
+
+        }
+
+    }
+
+
+    function goBack() {
+
+        window.location.href =
+            "admin-dashboard.html";
+
+    }
+
+
+    loadRestaurants();
+
+</script>
+
+
+</body>
+
+</html>

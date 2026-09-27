@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Coupon Management | Foodies</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        .header {
+            background: #ff4d2d;
+            color: white;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            background: white;
+            color: #ff4d2d;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: auto;
+            padding: 35px 0;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            margin-bottom: 8px;
+        }
+
+        .page-title p {
+            color: #666;
+        }
+
+        .form-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .form-card h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 7px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .form-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .primary-btn {
+            background: #ff4d2d;
+            color: white;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .secondary-btn {
+            background: #eeeeee;
+            color: #333;
+            border: none;
+            padding: 11px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .message {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .coupon-section {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .coupon-section h2 {
+            margin-bottom: 20px;
+        }
+
+        .coupon-table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        th {
+            background: #fff4ef;
+            color: #ff4d2d;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 5px;
+        }
+
+        .edit-btn {
+            background: #e8f1ff;
+            color: #1769aa;
+        }
+
+        .delete-btn {
+            background: #ffe8e8;
+            color: #d93025;
+        }
+
+        .empty-message {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+            display: none;
+        }
+
+        @media (max-width: 700px) {
+
+            .header {
+                padding: 18px 20px;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .logo {
+                font-size: 21px;
+            }
+        }
+    </style>
+    <script src="js/notifications.js"></script>
+
+</head>
+
+<body>
+
+<header class="header">
+
+    <div class="logo">
+        🍔 Foodies Admin
+    </div>
+
+    <button class="back-btn"
+            onclick="window.location.href='admin-dashboard.html'">
+        ← Dashboard
+    </button>
+
+</header>
+
+
+<main class="container">
+
+    <div class="page-title">
+
+        <h1>🎟️ Coupon Management</h1>
+
+        <p>
+            Create and manage discount coupons for Foodies customers.
+        </p>
+
+    </div>
+
+
+    <!-- ADD / EDIT FORM -->
+
+    <div class="form-card">
+
+        <h2 id="formTitle">
+            Add New Coupon
+        </h2>
+
+        <form id="couponForm">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+
+                    <label for="code">
+                        Coupon Code
+                    </label>
+
+                    <input
+                        type="text"
+                        id="code"
+                        placeholder="Example: FOOD50"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="discount">
+                        Discount Amount (₹)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="discount"
+                        min="1"
+                        step="0.01"
+                        placeholder="50"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="minimumOrder">
+                        Minimum Order (₹)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="minimumOrder"
+                        min="0"
+                        step="0.01"
+                        placeholder="299"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="expiryDate">
+                        Expiry Date
+                    </label>
+
+                    <input
+                        type="date"
+                        id="expiryDate"
+                        required
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="form-actions">
+
+                <button
+                    type="submit"
+                    class="primary-btn"
+                    id="submitBtn">
+                    Add Coupon
+                </button>
+
+                <button
+                    type="button"
+                    class="secondary-btn"
+                    id="cancelBtn"
+                    style="display:none;">
+                    Cancel
+                </button>
+
+            </div>
+
+
+            <div
+                id="message"
+                class="message">
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- COUPON LIST -->
+
+    <div class="coupon-section">
+
+        <h2>Available Coupons</h2>
+
+        <div class="coupon-table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Code</th>
+                        <th>Discount</th>
+                        <th>Minimum Order</th>
+                        <th>Expiry Date</th>
+                        <th>Actions</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="couponTableBody">
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div
+            id="emptyMessage"
+            class="empty-message">
+
+            No coupons available.
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<script>
+
+    const token =
+        localStorage.getItem("foodiesToken");
+
+
+    if (!token) {
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    const couponForm =
+        document.getElementById("couponForm");
+
+    const couponTableBody =
+        document.getElementById("couponTableBody");
+
+    const emptyMessage =
+        document.getElementById("emptyMessage");
+
+    const message =
+        document.getElementById("message");
+
+    const formTitle =
+        document.getElementById("formTitle");
+
+    const submitBtn =
+        document.getElementById("submitBtn");
+
+    const cancelBtn =
+        document.getElementById("cancelBtn");
+
+
+    let editingCouponId = null;
+
+
+    function showMessage(text, success) {
+
+        message.textContent = text;
+
+        message.style.display = "block";
+
+        message.style.background =
+            success ? "#e8f8ee" : "#ffe8e8";
+
+        message.style.color =
+            success ? "#16833b" : "#d93025";
+
+    }
+
+
+    async function loadCoupons() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/coupons",
+                    {
+                        headers: {
+                            "Authorization":
+                                "Bearer " + token
+                        }
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Unable to load coupons"
+                );
+
+            }
+
+
+            const coupons =
+                await response.json();
+
+
+            couponTableBody.innerHTML = "";
+
+
+            if (!coupons.length) {
+
+                emptyMessage.style.display =
+                    "block";
+
+                return;
+
+            }
+
+
+            emptyMessage.style.display =
+                "none";
+
+
+            coupons.forEach(function(coupon) {
+
+                const row =
+                    document.createElement("tr");
+
+
+                row.innerHTML = `
+
+                    <td>${coupon.id}</td>
+
+                    <td>
+                        <strong>
+                            ${coupon.code}
+                        </strong>
+                    </td>
+
+                    <td>
+                        ₹${coupon.discount}
+                    </td>
+
+                    <td>
+                        ₹${coupon.minimumOrder}
+                    </td>
+
+                    <td>
+                        ${coupon.expiryDate}
+                    </td>
+
+                    <td>
+
+                        <button
+                            class="edit-btn"
+                            onclick="editCoupon(
+                                ${coupon.id},
+                                '${coupon.code}',
+                                ${coupon.discount},
+                                ${coupon.minimumOrder},
+                                '${coupon.expiryDate}'
+                            )">
+                            Edit
+                        </button>
+
+                        <button
+                            class="delete-btn"
+                            onclick="deleteCoupon(
+                                ${coupon.id}
+                            )">
+                            Delete
+                        </button>
+
+                    </td>
+
+                `;
+
+
+                couponTableBody.appendChild(row);
+
+            });
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Unable to load coupons.",
+                false
+            );
+
+        }
+
+    }
+
+
+    couponForm.addEventListener(
+        "submit",
+        async function(event) {
+
+            event.preventDefault();
+
+
+            const couponData = {
+
+                code:
+                    document.getElementById("code")
+                    .value
+                    .trim()
+                    .toUpperCase(),
+
+                discount:
+                    Number(
+                        document.getElementById("discount")
+                        .value
+                    ),
+
+                minimumOrder:
+                    Number(
+                        document.getElementById("minimumOrder")
+                        .value
+                    ),
+
+                expiryDate:
+                    document.getElementById("expiryDate")
+                    .value
+
+            };
+
+
+            try {
+
+                let response;
+
+
+                if (editingCouponId === null) {
+
+                    response =
+                        await fetch(
+                            "/api/coupons",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json",
+
+                                    "Authorization":
+                                        "Bearer " + token
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        couponData
+                                    )
+                            }
+                        );
+
+                }
+
+                else {
+
+                    response =
+                        await fetch(
+                            "/api/coupons/"
+                            + editingCouponId,
+                            {
+                                method: "PUT",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json",
+
+                                    "Authorization":
+                                        "Bearer " + token
+                                },
+
+                                body:
+                                    JSON.stringify(
+                                        couponData
+                                    )
+                            }
+                        );
+
+                }
+
+
+                if (!response.ok) {
+
+                    const errorText = await response.text();
+
+                    throw new Error(
+                        errorText ||  "Coupon operation failed"
+                       
+                    );
+
+                }
+
+
+                showMessage(
+                    editingCouponId === null
+                        ? "Coupon added successfully."
+                        : "Coupon updated successfully.",
+                    true
+                );
+
+
+                resetForm();
+
+                loadCoupons();
+
+            }
+
+            catch (error) {
+
+                console.error(error);
+
+                if (error.message) {
+                    showMessage(
+                        error.message,
+                        false
+                    );
+                } else {
+                    showMessage(
+                        "Unable to save coupon.",
+                        false
+                    );
+                }
+
+            }
+
+        }
+    );
+
+
+    function editCoupon(
+        id,
+        code,
+        discount,
+        minimumOrder,
+        expiryDate
+    ) {
+
+        editingCouponId = id;
+
+
+        document.getElementById("code")
+            .value = code;
+
+        document.getElementById("discount")
+            .value = discount;
+
+        document.getElementById("minimumOrder")
+            .value = minimumOrder;
+
+        document.getElementById("expiryDate")
+            .value = expiryDate;
+
+
+        formTitle.textContent =
+            "Edit Coupon";
+
+
+        submitBtn.textContent =
+            "Update Coupon";
+
+
+        cancelBtn.style.display =
+            "inline-block";
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+
+
+    cancelBtn.addEventListener(
+        "click",
+        function() {
+
+            resetForm();
+
+        }
+    );
+
+
+    function resetForm() {
+
+        editingCouponId = null;
+
+        couponForm.reset();
+
+        formTitle.textContent =
+            "Add New Coupon";
+
+        submitBtn.textContent =
+            "Add Coupon";
+
+        cancelBtn.style.display =
+            "none";
+
+    }
+
+
+    async function deleteCoupon(id) {
+
+        const confirmed =
+            confirm(
+                "Are you sure you want to delete this coupon?"
+            );
+
+
+        if (!confirmed) {
+            return;
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/coupons/"
+                    + id,
+                    {
+                        method: "DELETE",
+
+                        headers: {
+                            "Authorization":
+                                "Bearer " + token
+                        }
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                throw new Error(
+                    "Delete failed"
+                );
+
+            }
+
+
+            showMessage(
+                "Coupon deleted successfully.",
+                true
+            );
+
+
+            loadCoupons();
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Unable to delete coupon.",
+                false
+            );
+
+        }
+
+    }
+
+
+    loadCoupons();
+
+</script>
+
+</body>
+</html>

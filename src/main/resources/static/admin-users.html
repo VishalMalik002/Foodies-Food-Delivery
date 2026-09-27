@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Foodies - Manage Users</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        /* HEADER */
+
+        .header {
+            background: linear-gradient(135deg, #ff4d2d, #ff7a45);
+            color: white;
+            padding: 22px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            border: none;
+            background: white;
+            color: #ff4d2d;
+            padding: 11px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .back-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* CONTAINER */
+
+        .container {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .page-title p {
+            color: #777;
+        }
+
+        /* TOP BAR */
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            width: 280px;
+            outline: none;
+        }
+
+        .search-box:focus {
+            border-color: #ff4d2d;
+        }
+
+        .add-btn {
+            background: #ff4d2d;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .add-btn:hover {
+            background: #e84326;
+        }
+
+        /* TABLE */
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            overflow-x: auto;
+            box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 900px;
+        }
+
+        th {
+            background: #fff4f1;
+            color: #333;
+            padding: 16px;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        td {
+            padding: 16px;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        /* ROLE */
+
+        .role {
+            padding: 6px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .customer {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .admin {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .delivery {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        /* ACTION BUTTONS */
+
+        .edit-btn,
+        .delete-btn {
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-right: 5px;
+        }
+
+        .edit-btn {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .delete-btn {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .edit-btn:hover,
+        .delete-btn:hover {
+            opacity: 0.8;
+        }
+
+        /* MODAL */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            border-radius: 14px;
+            box-shadow: 0 10px 35px rgba(0,0,0,0.2);
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #ff4d2d;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .cancel-btn {
+            background: #eee;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .save-btn {
+            background: #ff4d2d;
+            color: white;
+            border: none;
+            padding: 11px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* MESSAGE */
+
+        .message {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+
+    </style>
+
+    <script src="js/notifications.js"></script>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<div class="header">
+
+    <div class="logo">
+        👥 Foodies - Manage Users
+    </div>
+
+    <button
+        class="back-btn"
+        onclick="window.location.href='admin-dashboard.html'">
+
+        ← Admin Dashboard
+
+    </button>
+
+</div>
+
+
+<!-- MAIN -->
+
+<div class="container">
+
+    <div class="page-title">
+
+        <h1>User Management</h1>
+
+        <p>
+            View, add, edit and manage Foodies users.
+        </p>
+
+    </div>
+
+
+    <!-- TOP BAR -->
+
+    <div class="top-bar">
+
+        <input
+            type="text"
+            id="searchInput"
+            class="search-box"
+            placeholder="Search users..."
+            oninput="filterUsers()"
+        >
+
+        <button
+            class="add-btn"
+            onclick="openAddModal()">
+
+            + Add User
+
+        </button>
+
+    </div>
+
+
+    <!-- USERS TABLE -->
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Name</th>
+
+                    <th>Email</th>
+
+                    <th>Phone</th>
+
+                    <th>Role</th>
+
+                    <th>Address</th>
+
+                    <th>Actions</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="usersTable">
+
+                <tr>
+
+                    <td
+                        colspan="7"
+                        class="message">
+
+                        Loading users...
+
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- USER MODAL -->
+
+<div
+    class="modal"
+    id="userModal">
+
+    <div class="modal-content">
+
+        <h2 id="modalTitle">
+            Add User
+        </h2>
+
+
+        <div class="form-group">
+
+            <label>Name</label>
+
+            <input
+                type="text"
+                id="name"
+                placeholder="Enter name">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Email</label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter email">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Password</label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Leave blank to keep current password">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Phone</label>
+
+            <input
+                type="text"
+                id="phone"
+                placeholder="Enter phone">
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Role</label>
+
+            <select id="role">
+
+                <option value="CUSTOMER">
+                    CUSTOMER
+                </option>
+
+                <option value="ADMIN">
+                    ADMIN
+                </option>
+
+                <option value="DELIVERY_PARTNER">
+                    DELIVERY PARTNER
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Address</label>
+
+            <input
+                type="text"
+                id="address"
+                placeholder="Enter address">
+
+        </div>
+
+
+        <div class="modal-buttons">
+
+            <button
+                class="cancel-btn"
+                onclick="closeModal()">
+
+                Cancel
+
+            </button>
+
+            <button
+                class="save-btn"
+                onclick="saveUser()">
+
+                Save User
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const token =
+        localStorage.getItem("foodiesToken");
+
+
+    if (!token) {
+
+        window.location.href = "login.html";
+
+    }
+
+
+    let users = [];
+
+    let editingUserId = null;
+
+
+    /* =========================
+       LOAD USERS
+    ========================= */
+
+    async function loadUsers() {
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/users",
+                    {
+                        headers: {
+                            "Authorization":
+                                "Bearer " + token
+                        }
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+                console.error(
+                    "LOAD USERS ERROR:",
+                    response.status,
+                    errorText
+                );
+
+                throw new Error(
+                    "Unable to load users"
+                );
+
+            }
+
+
+            users =
+                await response.json();
+
+
+            displayUsers(users);
+
+
+        } catch (error) {
+
+            console.error(error);
+
+            document.getElementById(
+                "usersTable"
+            ).innerHTML = `
+                <tr>
+                    <td
+                        colspan="7"
+                        class="message">
+
+                        Unable to load users.
+
+                    </td>
+                </tr>
+            `;
+
+        }
+
+    }
+
+
+    /* =========================
+       DISPLAY USERS
+    ========================= */
+
+    function displayUsers(userList) {
+
+        const table =
+            document.getElementById(
+                "usersTable"
+            );
+
+
+        if (userList.length === 0) {
+
+            table.innerHTML = `
+                <tr>
+                    <td
+                        colspan="7"
+                        class="message">
+
+                        No users found.
+
+                    </td>
+                </tr>
+            `;
+
+            return;
+
+        }
+
+
+        table.innerHTML =
+            userList.map(function(user) {
+
+                let roleClass =
+                    "customer";
+
+
+                if (user.role === "ADMIN") {
+
+                    roleClass =
+                        "admin";
+
+                }
+
+                else if (
+                    user.role ===
+                    "DELIVERY_PARTNER"
+                ) {
+
+                    roleClass =
+                        "delivery";
+
+                }
+
+
+                return `
+                    <tr>
+
+                        <td>
+                            ${user.id}
+                        </td>
+
+                        <td>
+                            ${user.name || "-"}
+                        </td>
+
+                        <td>
+                            ${user.email || "-"}
+                        </td>
+
+                        <td>
+                            ${user.phone || "-"}
+                        </td>
+
+                        <td>
+
+                            <span
+                                class="role ${roleClass}">
+
+                                ${user.role || "CUSTOMER"}
+
+                            </span>
+
+                        </td>
+
+                        <td>
+                            ${user.address || "-"}
+                        </td>
+
+                        <td>
+
+                            <button
+                                type="button"
+                                class="edit-btn"
+                                onclick="editUser(${user.id})">
+
+                                Edit
+
+                            </button>
+
+                            <button
+                                type="button"
+                                class="delete-btn"
+                                onclick="deleteUser(${user.id})">
+
+                                Delete
+
+                            </button>
+
+                        </td>
+
+                    </tr>
+                `;
+
+            }).join("");
+
+    }
+
+
+    /* =========================
+       SEARCH
+    ========================= */
+
+    function filterUsers() {
+
+        const search =
+            document.getElementById(
+                "searchInput"
+            ).value
+            .trim()
+            .toLowerCase();
+
+
+        const filtered =
+            users.filter(function(user) {
+
+                return (
+
+                    (user.name || "")
+                        .toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    (user.email || "")
+                        .toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    (user.phone || "")
+                        .toLowerCase()
+                        .includes(search)
+
+                    ||
+
+                    (user.role || "")
+                        .toLowerCase()
+                        .includes(search)
+
+                );
+
+            });
+
+
+        displayUsers(filtered);
+
+    }
+
+
+    /* =========================
+       OPEN ADD MODAL
+    ========================= */
+
+    function openAddModal() {
+
+        editingUserId = null;
+
+
+        document.getElementById(
+            "modalTitle"
+        ).innerText = "Add User";
+
+
+        document.getElementById(
+            "name"
+        ).value = "";
+
+
+        document.getElementById(
+            "email"
+        ).value = "";
+
+
+        document.getElementById(
+            "password"
+        ).value = "";
+
+
+        document.getElementById(
+            "phone"
+        ).value = "";
+
+
+        document.getElementById(
+            "role"
+        ).value = "CUSTOMER";
+
+
+        document.getElementById(
+            "address"
+        ).value = "";
+
+
+        document.getElementById(
+            "searchInput"
+        ).value = "";
+
+
+        displayUsers(users);
+
+
+        document.getElementById(
+            "userModal"
+        ).style.display = "flex";
+
+    }
+
+
+    /* =========================
+       EDIT USER
+    ========================= */
+
+    function editUser(id) {
+
+        const user =
+            users.find(function(item) {
+
+                return Number(item.id) ===
+                       Number(id);
+
+            });
+
+
+        if (!user) {
+
+            alert("User not found!");
+
+            return;
+
+        }
+
+
+        editingUserId =
+            user.id;
+
+
+        /*
+         * Clear search so that
+         * complete user list remains visible
+         */
+
+        document.getElementById(
+            "searchInput"
+        ).value = "";
+
+
+        displayUsers(users);
+
+
+        document.getElementById(
+            "modalTitle"
+        ).innerText = "Edit User";
+
+
+        document.getElementById(
+            "name"
+        ).value =
+            user.name || "";
+
+
+        document.getElementById(
+            "email"
+        ).value =
+            user.email || "";
+
+
+        /*
+         * Password remains blank.
+         * Backend will preserve old password.
+         */
+
+        document.getElementById(
+            "password"
+        ).value = "";
+
+
+        document.getElementById(
+            "phone"
+        ).value =
+            user.phone || "";
+
+
+        document.getElementById(
+            "role"
+        ).value =
+            user.role || "CUSTOMER";
+
+
+        document.getElementById(
+            "address"
+        ).value =
+            user.address || "";
+
+
+        document.getElementById(
+            "userModal"
+        ).style.display = "flex";
+
+    }
+
+
+    /* =========================
+       CLOSE MODAL
+    ========================= */
+
+    function closeModal() {
+
+        document.getElementById(
+            "userModal"
+        ).style.display = "none";
+
+    }
+
+
+    /* =========================
+       SAVE USER
+    ========================= */
+
+    async function saveUser() {
+
+        const userData = {
+
+            name:
+                document.getElementById(
+                    "name"
+                ).value.trim(),
+
+            email:
+                document.getElementById(
+                    "email"
+                ).value.trim(),
+
+            password:
+                document.getElementById(
+                    "password"
+                ).value,
+
+            phone:
+                document.getElementById(
+                    "phone"
+                ).value.trim(),
+
+            role:
+                document.getElementById(
+                    "role"
+                ).value,
+
+            address:
+                document.getElementById(
+                    "address"
+                ).value.trim()
+
+        };
+
+
+        /*
+         * Basic frontend validation
+         */
+
+        if (!userData.name) {
+
+            alert("Please enter user name.");
+
+            return;
+
+        }
+
+
+        if (!userData.email) {
+
+            alert("Please enter email.");
+
+            return;
+
+        }
+
+
+        if (!userData.phone) {
+
+            alert("Please enter phone number.");
+
+            return;
+
+        }
+
+
+        let url =
+            "/api/users";
+
+        let method =
+            "POST";
+
+
+        if (editingUserId !== null) {
+
+            url =
+                "/api/users/"
+                + editingUserId;
+
+            method =
+                "PUT";
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    url,
+                    {
+                        method: method,
+
+                        headers: {
+
+                            "Content-Type":
+                                "application/json",
+
+                            "Authorization":
+                                "Bearer " + token
+
+                        },
+
+                        body:
+                            JSON.stringify(
+                                userData
+                            )
+
+                    }
+                );
+
+
+            /*
+             * Read server response
+             * before throwing error.
+             */
+
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+
+                console.error(
+                    "USER SAVE ERROR:",
+                    response.status,
+                    errorText
+                );
+
+
+                alert(
+                    "Unable to save user.\n\n" +
+                    "Status: " +
+                    response.status +
+                    "\n\n" +
+                    (
+                        errorText ||
+                        "Server returned an error."
+                    )
+                );
+
+
+                return;
+
+            }
+
+
+            const savedUser =
+                await response.json();
+
+            alert(
+                editingUserId !== null
+                ? "User updated successfully! ✅"
+                : "User added successfully! ✅"
+            );
+
+
+            closeModal();
+
+
+            editingUserId =
+                null;
+
+
+            await loadUsers();
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "SAVE USER ERROR:",
+                error
+            );
+
+
+            alert(
+                "Unable to connect to server."
+            );
+
+        }
+
+    }
+
+
+    /* =========================
+       DELETE USER
+    ========================= */
+
+    async function deleteUser(id) {
+
+        const confirmDelete =
+            confirm(
+                "Are you sure you want to delete this user?"
+            );
+
+
+        if (!confirmDelete) {
+
+            return;
+
+        }
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "/api/users/"
+                    + id,
+                    {
+                        method: "DELETE",
+
+                        headers: {
+
+                            "Authorization":
+                                "Bearer " + token
+
+                        }
+
+                    }
+                );
+
+
+            if (!response.ok) {
+
+                const errorText =
+                    await response.text();
+
+
+                console.error(
+                    "DELETE USER ERROR:",
+                    response.status,
+                    errorText
+                );
+
+
+                alert(
+                    "Unable to delete user.\n\n" +
+                    "Status: " +
+                    response.status
+                );
+
+
+                return;
+
+            }
+
+
+            alert(
+                "User deleted successfully! ✅"
+            );
+
+
+            await loadUsers();
+
+        }
+
+        catch (error) {
+
+            console.error(
+                "DELETE ERROR:",
+                error
+            );
+
+
+            alert(
+                "Unable to connect to server."
+            );
+
+        }
+
+    }
+
+
+    /* =========================
+       INITIAL LOAD
+    ========================= */
+
+    loadUsers();
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Restaurants | Foodies</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        .restaurants-page {
+            min-height: 100vh;
+            background: #f7f7f7;
+        }
+
+        .restaurants-header {
+            background: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .restaurants-logo {
+            color: #ff6b00;
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .back-btn {
+            border: none;
+            background: #fff1e8;
+            color: #ff6b00;
+            padding: 10px 18px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .restaurants-container {
+            width: 88%;
+            max-width: 1250px;
+            margin: auto;
+            padding: 40px 0;
+        }
+
+        .restaurants-title {
+            margin-bottom: 30px;
+        }
+
+        .restaurants-title h1 {
+            margin: 0 0 8px;
+            font-size: 32px;
+        }
+
+        .restaurants-title p {
+            margin: 0;
+            color: #777;
+        }
+
+        .restaurant-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .restaurant-card {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            transition: 0.3s;
+        }
+
+        .restaurant-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .restaurant-image {
+            height: 180px;
+            background: linear-gradient(135deg, #ff6b00, #ff9a5c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+        }
+
+        .restaurant-content {
+            padding: 22px;
+        }
+
+        .restaurant-content h3 {
+            margin: 0 0 8px;
+            font-size: 21px;
+        }
+
+        .restaurant-location {
+            color: #777;
+            margin-bottom: 12px;
+        }
+
+        .restaurant-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .rating {
+            font-weight: 700;
+        }
+
+        .status {
+            color: #159447;
+            background: #eaf8ef;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .view-menu-btn {
+            width: 100%;
+            border: none;
+            background: #ff6b00;
+            color: white;
+            padding: 12px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #777;
+        }
+
+        @media (max-width: 900px) {
+            .restaurant-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .restaurant-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .restaurants-container {
+                width: 92%;
+            }
+        }
+    </style>
+    <script src="js/notifications.js"></script>
+
+</head>
+
+<body>
+
+<div class="restaurants-page">
+
+    <header class="restaurants-header">
+
+        <div class="restaurants-logo">
+            🍔 Foodies
+        </div>
+
+        <button class="back-btn" onclick="goBack()">
+            ← Dashboard
+        </button>
+
+    </header>
+
+
+    <main class="restaurants-container">
+
+        <div class="restaurants-title">
+            <h1>Explore Restaurants 🍽️</h1>
+            <p>Discover restaurants available on Foodies.</p>
+        </div>
+
+        <div id="restaurantGrid" class="restaurant-grid">
+
+            <div class="loading">
+                Loading restaurants...
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<script>
+
+    const token = localStorage.getItem("foodiesToken");
+
+    if (!token) {
+        window.location.href = "login.html";
+    }
+
+
+    async function loadRestaurants() {
+
+        const restaurantGrid =
+            document.getElementById("restaurantGrid");
+
+        try {
+
+            const response = await fetch(
+                "/api/restaurants"
+            );
+
+            if (!response.ok) {
+                throw new Error("Unable to load restaurants");
+            }
+
+            const restaurants = await response.json();
+
+            restaurantGrid.innerHTML = "";
+
+            if (restaurants.length === 0) {
+
+                restaurantGrid.innerHTML = `
+                    <div class="loading">
+                        No restaurants available.
+                    </div>
+                `;
+
+                return;
+            }
+
+
+            for (const restaurant of restaurants) {
+
+                const card = document.createElement("div");
+
+                card.className = "restaurant-card";
+
+
+                /*
+                 * Default rating
+                 *
+                 * If restaurant has no review yet,
+                 * existing restaurant rating will be shown.
+                 */
+                let averageRating = restaurant.rating || "N/A";
+
+
+                /*
+                 * Get average rating from Review System
+                 */
+                try {
+
+                    const ratingResponse = await fetch(
+                        `/api/reviews/restaurant/${restaurant.id}/average`
+                    );
+
+                    if (ratingResponse.ok) {
+
+                        const reviewRating =
+                            await ratingResponse.json();
+
+                        if (reviewRating > 0) {
+
+                            averageRating =
+                                Number(reviewRating).toFixed(1);
+
+                        }
+                    }
+
+                } catch (error) {
+
+                }
+
+
+                card.innerHTML = `
+
+                    <div class="restaurant-image">
+                        🍽️
+                    </div>
+
+                    <div class="restaurant-content">
+
+                        <h3>
+                            ${restaurant.name || "Restaurant"}
+                        </h3>
+
+                        <div class="restaurant-location">
+                            📍 ${restaurant.address || "Location unavailable"}
+                        </div>
+
+                        <div class="restaurant-info">
+
+                            <span class="rating">
+                                ⭐ ${averageRating}
+                            </span>
+
+                            <span class="status">
+                                ${restaurant.status || "OPEN"}
+                            </span>
+
+                        </div>
+
+                        <button
+                            class="view-menu-btn"
+                            onclick="viewRestaurant(${restaurant.id})">
+
+                            View Menu
+
+                        </button>
+
+                    </div>
+                `;
+
+
+                restaurantGrid.appendChild(card);
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Restaurant loading error:",
+                error
+            );
+
+            restaurantGrid.innerHTML = `
+                <div class="loading">
+                    Unable to load restaurants.
+                    Please make sure Foodies server is running.
+                </div>
+            `;
+        }
+    }
+
+
+    function viewRestaurant(id) {
+
+        window.location.href =
+            "menu.html?restaurantId=" + id;
+
+    }
+
+
+    function goBack() {
+
+        window.location.href =
+            "customer-dashboard.html";
+
+    }
+
+
+    loadRestaurants();
+
+</script>
+
+</body>
+</html>

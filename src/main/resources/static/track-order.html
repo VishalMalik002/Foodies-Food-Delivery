@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Track Delivery | Foodies</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: #f7f7f7;
+        }
+
+        .tracking-header {
+            background: white;
+            padding: 18px 6%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+        }
+
+        .tracking-logo {
+            color: #ff6b00;
+            font-size: 26px;
+            font-weight: 800;
+        }
+
+        .back-btn {
+            border: none;
+            background: #fff1e8;
+            color: #ff6b00;
+            padding: 10px 18px;
+            border-radius: 9px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .tracking-container {
+            width: 88%;
+            max-width: 1000px;
+            margin: auto;
+            padding: 40px 0;
+        }
+
+        .tracking-container h1 {
+            margin: 0 0 8px;
+            font-size: 30px;
+        }
+
+        .subtitle {
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        .order-select-box {
+            background: white;
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+        }
+
+        .order-select-box label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        #orderSelect {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #ddd;
+            border-radius: 9px;
+            font-size: 15px;
+        }
+
+        .tracking-card {
+            background: white;
+            padding: 28px;
+            border-radius: 16px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.05);
+        }
+
+        .tracking-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .tracking-top h2 {
+            margin: 0;
+        }
+
+        .status {
+            background: #fff1e8;
+            color: #ff6b00;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .tracking-details {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .detail-box {
+            background: #fafafa;
+            padding: 16px;
+            border-radius: 10px;
+        }
+
+        .detail-label {
+            display: block;
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .progress-section {
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 1px solid #eee;
+        }
+
+        .progress-section h3 {
+            margin-top: 0;
+        }
+
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .progress-step.completed {
+            border-left: 5px solid #28a745;
+            background: #f0fff4;
+        }
+
+        .progress-step.completed .step-icon {
+            background: #28a745;
+            color: white;
+        }
+
+        .progress-step.active {
+            border-left: 5px solid #ff4d2d;
+            background: #fff5f2;
+        }
+
+        .progress-step.active .step-icon {
+            background: #ff4d2d;
+            color: white;
+        }
+
+        .step-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: #fff1e8;
+            color: #ff6b00;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .step-text strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .step-text span {
+            color: #888;
+            font-size: 13px;
+        }
+
+        .empty-box,
+        .loading {
+            background: white;
+            padding: 50px 25px;
+            text-align: center;
+            border-radius: 16px;
+            color: #777;
+        }
+
+        @media (max-width: 700px) {
+
+            .tracking-header {
+                padding: 16px 4%;
+            }
+
+            .tracking-logo {
+                font-size: 22px;
+            }
+
+            .tracking-container {
+                width: 92%;
+                padding: 30px 0;
+            }
+
+            .tracking-container h1 {
+                font-size: 26px;
+            }
+
+            .tracking-top {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .tracking-details {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+    <script src="js/notifications.js"></script>
+
+</head>
+
+<body>
+
+    <header class="tracking-header">
+
+        <div class="tracking-logo">
+            🛵 Foodies
+        </div>
+
+        <button class="back-btn" onclick="goBack()">
+            ← Dashboard
+        </button>
+
+    </header>
+
+
+    <main class="tracking-container">
+
+        <h1>Track Your Delivery</h1>
+
+        <p class="subtitle">
+            Select an order to check its current delivery status.
+        </p>
+
+
+        <div id="mainContent">
+
+            <div class="loading">
+                Loading your orders...
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script>
+
+        const token =
+            localStorage.getItem("foodiesToken");
+
+
+        if (!token) {
+
+            window.location.href = "login.html";
+
+        }
+
+
+        let orders = [];
+
+
+        async function loadOrders() {
+
+            try {
+
+                const payload =
+                    JSON.parse(
+                        atob(
+                            token
+                                .split(".")[1]
+                                .replace(/-/g, "+")
+                                .replace(/_/g, "/")
+                        )
+                    );
+
+
+                const email = payload.sub;
+
+
+                const userResponse =
+                    await fetch(
+                        `/api/users/by-email?email=${encodeURIComponent(email)}`,
+                        {
+                            headers: {
+                                "Authorization":
+                                    "Bearer " + token
+                            }
+                        }
+                    );
+
+
+                if (!userResponse.ok) {
+                    throw new Error("User not found");
+                }
+
+
+                const user =
+                    await userResponse.json();
+
+
+                const ordersResponse =
+                    await fetch(
+                        `/api/orders/user/${user.id}`,
+                        {
+                            headers: {
+                                "Authorization":
+                                    "Bearer " + token
+                            }
+                        }
+                    );
+
+
+                if (!ordersResponse.ok) {
+                    throw new Error("Orders not found");
+                }
+
+
+                orders =
+                    await ordersResponse.json();
+
+
+                const mainContent =
+                    document.getElementById("mainContent");
+
+
+                if (orders.length === 0) {
+
+                    mainContent.innerHTML = `
+
+                        <div class="empty-box">
+
+                            <h2>📦 No Orders Found</h2>
+
+                            <p>
+                                Place an order to track your delivery.
+                            </p>
+
+                        </div>
+
+                    `;
+
+                    return;
+
+                }
+
+
+                mainContent.innerHTML = `
+
+                    <div class="order-select-box">
+
+                        <label for="orderSelect">
+                            Select Your Order
+                        </label>
+
+                        <select id="orderSelect"
+                            onchange="showOrderDetails()">
+
+                            ${orders.map(order => `
+
+                                <option value="${order.id}">
+                                    Order #${order.id} - ₹${order.totalPrice || 0}
+                                </option>
+
+                            `).join("")}
+
+                        </select>
+
+                    </div>
+
+                    <div id="orderDetails"></div>
+
+                `;
+
+
+                showOrderDetails();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Tracking error:",
+                    error
+                );
+
+
+                document.getElementById(
+                    "mainContent"
+                ).innerHTML = `
+
+                    <div class="empty-box">
+
+                        <h2>⚠️ Unable to Load Orders</h2>
+
+                        <p>
+                            Please try again later.
+                        </p>
+
+                    </div>
+
+                `;
+
+            }
+
+        }
+
+
+        function showOrderDetails() {
+
+    const selectedId =
+        Number(
+            document.getElementById(
+                "orderSelect"
+            ).value
+        );
+
+    const order =
+        orders.find(
+            item => item.id === selectedId
+        );
+
+    if (!order) {
+        return;
+    }
+
+    const status =
+        order.status || "PLACED";
+
+    const statusOrder = [
+        "PLACED",
+        "CONFIRMED",
+        "PREPARING",
+        "OUT_FOR_DELIVERY",
+        "DELIVERED"
+    ];
+
+    const currentIndex =
+        statusOrder.indexOf(status);
+
+    function getStepClass(stepIndex) {
+
+        if (status === "DELIVERED") {
+            return "completed";
+        }
+
+        if (stepIndex < currentIndex) {
+            return "completed";
+        }
+
+        if (stepIndex === currentIndex) {
+            return "active";
+        }
+
+        return "";
+    }
+
+    document.getElementById(
+        "orderDetails"
+    ).innerHTML = `
+
+        <div class="tracking-card">
+
+            <div class="tracking-top">
+
+                <h2>
+                    Order #${order.id}
+                </h2>
+
+                <span class="status">
+                    ${status}
+                </span>
+
+            </div>
+
+
+            <div class="tracking-details">
+
+                <div class="detail-box">
+
+                    <span class="detail-label">
+                        Total Amount
+                    </span>
+
+                    <span class="detail-value">
+                        ₹${order.totalPrice || 0}
+                    </span>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <span class="detail-label">
+                        Payment Status
+                    </span>
+
+                    <span class="detail-value">
+                        ${order.paymentStatus || "PENDING"}
+                    </span>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <span class="detail-label">
+                        Restaurant ID
+                    </span>
+
+                    <span class="detail-value">
+                        ${order.restaurantId || "N/A"}
+                    </span>
+
+                </div>
+
+
+                <div class="detail-box">
+
+                    <span class="detail-label">
+                        Delivery Address
+                    </span>
+
+                    <span class="detail-value">
+                        ${order.deliveryAddress || "Not available"}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="progress-section">
+
+                <h3>
+                    Delivery Progress
+                </h3>
+
+
+                <div class="progress-step ${getStepClass(0)}">
+
+                    <div class="step-icon">
+                        ✓
+                    </div>
+
+                    <div class="step-text">
+
+                        <strong>
+                            Order Placed
+                        </strong>
+
+                        <span>
+                            Your order has been placed successfully.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="progress-step ${getStepClass(1)}">
+
+                    <div class="step-icon">
+                        👨‍🍳
+                    </div>
+
+                    <div class="step-text">
+
+                        <strong>
+                            Order Confirmed
+                        </strong>
+
+                        <span>
+                            Restaurant has confirmed your order.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="progress-step ${getStepClass(2)}">
+
+                    <div class="step-icon">
+                        👨‍🍳
+                    </div>
+
+                    <div class="step-text">
+
+                        <strong>
+                            Preparing Order
+                        </strong>
+
+                        <span>
+                            Restaurant is preparing your food.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="progress-step ${getStepClass(3)}">
+
+                    <div class="step-icon">
+                        🛵
+                    </div>
+
+                    <div class="step-text">
+
+                        <strong>
+                            Out for Delivery
+                        </strong>
+
+                        <span>
+                            Delivery partner is on the way.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="progress-step ${getStepClass(4)}">
+
+                    <div class="step-icon">
+                        🏠
+                    </div>
+
+                    <div class="step-text">
+
+                        <strong>
+                            Delivered
+                        </strong>
+
+                        <span>
+                            Your order has been delivered successfully.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+        function goBack() {
+
+            window.location.href =
+                "customer-dashboard.html";
+
+        }
+
+
+        loadOrders();
+
+    </script>
+
+</body>
+
+</html>
