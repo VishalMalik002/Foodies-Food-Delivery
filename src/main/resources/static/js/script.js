@@ -1073,7 +1073,7 @@ function updateDeliveryPartnerLocation() {
                         method: "PUT",
                         headers: {
                             "Authorization":
-                                "Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhZG1pbkBmb29kaWVzLmNvbSIsInJvbGUiOiJBRE1JTiIsImlhdCI6MTc4OTQ2MjMyNSwiZXhwIjoxNzg5NDY1OTI1fQ.DyLW-7qMe_FITn8rn9nGC-QGbc1ihbAOn59aOrgIObE"
+                                "Bearer " + localStorage.getItem("foodiesToken")
                         }
                     }
                 );
