@@ -25,6 +25,7 @@ The application provides restaurant browsing, menu management, cart and checkout
 ## 👥 User Roles
 
 ### Customer
+
 - Browse restaurants
 - View menus
 - Add items to cart
@@ -36,6 +37,7 @@ The application provides restaurant browsing, menu management, cart and checkout
 - Manage profile
 
 ### Admin
+
 - Manage users
 - Manage restaurants
 - Manage menu items
@@ -44,6 +46,7 @@ The application provides restaurant browsing, menu management, cart and checkout
 - Manage coupons and offers
 
 ### Delivery Partner
+
 - View assigned orders
 - Update delivery status
 - Update delivery location
@@ -52,11 +55,13 @@ The application provides restaurant browsing, menu management, cart and checkout
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - HTML5
 - CSS3
 - JavaScript
 
 ### Backend
+
 - Java
 - Spring Boot
 - Spring Security
@@ -64,20 +69,23 @@ The application provides restaurant browsing, menu management, cart and checkout
 - REST APIs
 
 ### Database
+
 - MySQL
 
 ### ORM
+
 - JPA
 - Hibernate
 
 ### Build Tool
+
 - Maven
 
 ## 🔐 Security
 
 The application uses Spring Security with JWT-based authentication and role-based authorization.
 
-Different application features and APIs are protected according to the user's role such as:
+Different application features and APIs are protected according to the user's role:
 
 - CUSTOMER
 - ADMIN
@@ -109,6 +117,7 @@ src
 │       └── application.properties
 │
 └── test
+```
 
 ## ⚙️ Installation & Setup
 
@@ -116,6 +125,41 @@ src
 
 ```bash
 git clone https://github.com/VishalMalik002/Foodies-Food-Delivery.git
+```
+
+### 2. Open the Project
+
+Open the project in IntelliJ IDEA, Eclipse, Spring Tool Suite or VS Code.
+
+### 3. Configure MySQL
+
+Create the database:
+
+```sql
+CREATE DATABASE foodies_db;
+```
+
+Update your MySQL username and password in:
+
+```text
+src/main/resources/application.properties
+```
+
+Make sure MySQL is running before starting the application.
+
+### 4. Run the Application
+
+For Windows:
+
+```bash
+mvnw.cmd spring-boot:run
+```
+
+### 5. Open the Application
+
+```text
+http://localhost:8080
+```
 
 ## 📡 Main API Modules
 
@@ -144,6 +188,7 @@ PREPARING
 OUT_FOR_DELIVERY
    ↓
 DELIVERED
+```
 
 ## 🚀 Future Enhancements
 
@@ -163,5 +208,6 @@ DELIVERED
 
 B.Tech – Computer Science & Engineering (Data Science)
 
-GitHub:  
+GitHub:
+
 https://github.com/VishalMalik002
