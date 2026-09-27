@@ -1,6 +1,6 @@
 package com.foodies.fooddelivery.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,7 +24,8 @@ private String name;
 private String email;
 
 @NotBlank(message = "Password is required")
-@JsonIgnore 
+@JsonProperty(access = 
+    JsonProperty.Access.WRITE_ONLY)
 private String password;
 
 @NotBlank(message = "Phone is required")

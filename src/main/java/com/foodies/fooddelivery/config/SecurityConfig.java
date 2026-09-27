@@ -82,6 +82,8 @@ public class SecurityConfig {
                 )
                 .authenticated()
 
+                .requestMatchers(HttpMethod.POST, "/api/users").permitAll()
+
                 // Other user-management APIs = ADMIN only
                 .requestMatchers("/api/users/**")
                 .hasRole("ADMIN")
