@@ -172,11 +172,22 @@ public class SecurityConfig {
                 // DELIVERY PARTNER APIs
                 // =========================
 
-                // Customer can see delivery partner location
-                .requestMatchers(
-                    "/api/delivery-partners/*/location"
-                )
-                .permitAll()
+               // Customer can view delivery partner location
+                    .requestMatchers(
+                        HttpMethod.GET,
+                        "/api/delivery-partners/*/location"
+                    )
+                    .permitAll()
+
+                    // Only Admin / Delivery Partner can update location
+                    .requestMatchers(
+                        HttpMethod.PUT,
+                        "/api/delivery-partners/*/location"
+                    )
+                    .hasAnyRole(
+                        "ADMIN",
+                        "DELIVERY_PARTNER"
+                    )
 
                 // Delivery partner management
                 .requestMatchers("/api/delivery-partners/**")

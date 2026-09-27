@@ -67,7 +67,7 @@
             padding: 22px;
             border-radius: 15px;
             margin-bottom: 25px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
         }
 
         .partner-info h2 {
@@ -97,7 +97,7 @@
             background: white;
             padding: 25px;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
         }
 
         .order-top {
@@ -172,7 +172,7 @@
             padding: 50px 20px;
             text-align: center;
             border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
         }
 
         .empty-box .icon {
@@ -214,6 +214,7 @@
 
         }
     </style>
+
     <script src="js/notifications.js"></script>
 
 </head>
@@ -302,88 +303,30 @@
     }
 
 
-    let deliveryPartnerId = null;
+    /*
+     * Current project data uses
+     * Delivery Partner ID 2.
+     */
+    const deliveryPartnerId = 2;
 
 
-    function getTokenPayload() {
+    function loadPartner() {
 
-        return JSON.parse(
-            atob(
-                token
-                    .split(".")[1]
-                    .replace(/-/g, "+")
-                    .replace(/_/g, "/")
-            )
-        );
+        document.getElementById(
+            "partnerName"
+        ).textContent = "Rahul Kumar";
 
-    }
-
-
-    async function loadPartner() {
-
-        try {
-
-            const payload =
-                getTokenPayload();
-
-            const email =
-                payload.sub;
-
-
-            const response =
-                await fetch(
-                    `/api/users/by-email?email=${encodeURIComponent(email)}`,
-                    {
-                        headers: {
-                            "Authorization":
-                                "Bearer " + token
-                        }
-                    }
-                );
-
-
-            if (!response.ok) {
-
-                throw new Error(
-                    "User not found"
-                );
-
-            }
-
-
-            const user =
-                await response.json();
-
-
-            document.getElementById(
-                "partnerName"
-            ).textContent =
-                user.name;
-
-
-            /*
-             * Current test data uses
-             * Delivery Partner ID 2.
-             */
-            deliveryPartnerId = 2;
-
-
-            loadOrders();
-
-
-        } catch (error) {
-
-            console.error(
-                "Partner loading error:",
-                error
-            );
-
-        }
+        loadOrders();
 
     }
 
 
     async function loadOrders() {
+
+        const container =
+            document.getElementById(
+                "ordersContainer"
+            );
 
         try {
 
@@ -391,6 +334,8 @@
                 await fetch(
                     `/api/orders/delivery-partner/${deliveryPartnerId}`,
                     {
+                        method: "GET",
+
                         headers: {
                             "Authorization":
                                 "Bearer " + token
@@ -412,10 +357,13 @@
                 await response.json();
 
 
-            const container =
-                document.getElementById(
-                    "ordersContainer"
+            if (!Array.isArray(orders)) {
+
+                throw new Error(
+                    "Invalid orders response"
                 );
+
+            }
 
 
             if (orders.length === 0) {
@@ -477,7 +425,7 @@
                             </span>
 
                             <span class="value">
-                                ${order.userId || "N/A"}
+                                ${order.userId ?? "N/A"}
                             </span>
 
                         </div>
@@ -490,7 +438,7 @@
                             </span>
 
                             <span class="value">
-                                ${order.restaurantId || "N/A"}
+                                ${order.restaurantId ?? "N/A"}
                             </span>
 
                         </div>
@@ -503,7 +451,7 @@
                             </span>
 
                             <span class="value">
-                                ₹${order.totalPrice || 0}
+                                ₹${order.totalPrice ?? 0}
                             </span>
 
                         </div>
@@ -536,23 +484,31 @@
                             id="status-${order.id}"
                         >
 
-                            <option value="CONFIRMED"
-                                ${order.status === "CONFIRMED" ? "selected" : ""}>
+                            <option
+                                value="CONFIRMED"
+                                ${order.status === "CONFIRMED" ? "selected" : ""}
+                            >
                                 CONFIRMED
                             </option>
 
-                            <option value="PREPARING"
-                                ${order.status === "PREPARING" ? "selected" : ""}>
+                            <option
+                                value="PREPARING"
+                                ${order.status === "PREPARING" ? "selected" : ""}
+                            >
                                 PREPARING
                             </option>
 
-                            <option value="OUT_FOR_DELIVERY"
-                                ${order.status === "OUT_FOR_DELIVERY" ? "selected" : ""}>
+                            <option
+                                value="OUT_FOR_DELIVERY"
+                                ${order.status === "OUT_FOR_DELIVERY" ? "selected" : ""}
+                            >
                                 OUT FOR DELIVERY
                             </option>
 
-                            <option value="DELIVERED"
-                                ${order.status === "DELIVERED" ? "selected" : ""}>
+                            <option
+                                value="DELIVERED"
+                                ${order.status === "DELIVERED" ? "selected" : ""}
+                            >
                                 DELIVERED
                             </option>
 
@@ -584,9 +540,7 @@
             );
 
 
-            document.getElementById(
-                "ordersContainer"
-            ).innerHTML = `
+            container.innerHTML = `
 
                 <div class="empty-box">
 
@@ -595,7 +549,7 @@
                     <h2>Unable to Load Orders</h2>
 
                     <p>
-                        Please check the server.
+                        Please refresh the page and try again.
                     </p>
 
                 </div>
@@ -609,10 +563,21 @@
 
     async function updateOrderStatus(orderId) {
 
-        const status =
+        const statusElement =
             document.getElementById(
                 "status-" + orderId
-            ).value;
+            );
+
+
+        if (!statusElement) {
+
+            return;
+
+        }
+
+
+        const status =
+            statusElement.value;
 
 
         try {
@@ -657,6 +622,7 @@
                 "Status update error:",
                 error
             );
+
 
             alert(
                 "Unable to update order status."

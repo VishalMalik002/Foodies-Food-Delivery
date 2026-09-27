@@ -1104,10 +1104,13 @@ function updateDeliveryPartnerLocation() {
     );
 }
 
-updateDeliveryPartnerLocation();
-setInterval(() => {
+if (window.location.pathname.endsWith("delivery-dashboard.html")) {
     updateDeliveryPartnerLocation();
-}, 3000);
+
+    setInterval(() => {
+        updateDeliveryPartnerLocation();
+    }, 3000);
+}
 
 // =========================
 // SIGNUP PASSWORD TOGGLE
